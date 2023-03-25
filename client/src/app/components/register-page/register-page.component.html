@@ -1,0 +1,13 @@
+<div class="row justify-content-center">
+    <div class="col-4">
+        <form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+            <h1 class="text-center text-primary">Sign up</h1>
+                <input name="username" [(ngModel)]="model.username" class="form-control mb-3" type="text" placeholder="Username">
+                <input name="password" [(ngModel)]="model.password" class="form-control mb-3" type="password" placeholder="Password">
+            <div class="text-center">
+                <button class="btn btn-primary" type="submit">Register</button>
+                <button class="btn" type="button" routerLink="">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
