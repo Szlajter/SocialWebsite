@@ -8,7 +8,6 @@ import { AccountService } from 'src/app/services/account.service';
 })
 export class HomePageComponent {
   model: any = {}
-
-
+  
   constructor(private accountService: AccountService) {}
 }

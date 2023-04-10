@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NavComponent } from './components/nav/nav.component';
 import { FormsModule } from '@angular/forms';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomePageComponent } from './components/home-page/home-page.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { RegisterPageComponent } from './components/register-page/register-page.component';
+import { SharedModule } from './modules/shared.module';
+import { TestPageComponent } from './components/test-page/test-page.component';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import { ServerErrorPageComponent } from './components/server-error-page/server-error-page.component';
 
 @NgModule({
   declarations: [
@@ -19,17 +21,22 @@ import { RegisterPageComponent } from './components/register-page/register-page.
     NavComponent,
     HomePageComponent,
     LoginPageComponent,
-    RegisterPageComponent
+    RegisterPageComponent,
+    TestPageComponent,
+    NotFoundPageComponent,
+    ServerErrorPageComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    BsDropdownModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    SharedModule
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
