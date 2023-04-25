@@ -8,8 +8,7 @@ namespace API.Controllers
 {
     [Authorize]
     public class UsersController: BaseApiController
-    {
-
+    { 
         private readonly ApplicationDbContext _context;
 
         public UsersController(ApplicationDbContext context)
@@ -17,17 +16,23 @@ namespace API.Controllers
             _context = context;
     
         }        
-        [AllowAnonymous]
+        
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.Users.Include(p => p.Photos).ToListAsync();
         }
-
-        [HttpGet("{id}")]
+        
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             return await _context.Users.FindAsync(id);
+        }
+
+        [HttpGet("{username}")]
+        public async Task<ActionResult<User>> GetUserByUsername(string username)
+        {
+            return await _context.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName == username);
         }
     }
 }
