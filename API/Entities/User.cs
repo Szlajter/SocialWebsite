@@ -21,15 +21,5 @@ namespace API.Entities
         public string Country { get; set; }
         public string Description { get; set; }
         public List<Photo> Photos { get; set; } = new();
-
-        //it is not accurate but it's fine for now
-        public int GetAge()
-        {
-            var today = DateOnly.FromDateTime(DateTime.UtcNow);
-            int age = today.Year - Birthdate.Year;
-            if(Birthdate > today.AddYears(-age)) age--;
-
-            return age;
-        }
     }
 }
