@@ -1,0 +1,12 @@
+<div class="card" *ngIf="member">
+    <a href="/profile-page/{{member.userName}}">
+        <div class="card-left">
+            <img src="{{member.photoUrl}}" alt="{{member.nickName}}" class="rounded-circle">
+            <span>{{member.nickName}}</span>
+        </div>
+        <div class="card-right">
+            <button >Obserwuj</button>
+            <button >Wyślij wiadomość</button>
+        </div>
+    </a>
+</div>
