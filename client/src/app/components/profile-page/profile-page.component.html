@@ -1,21 +1,22 @@
-<img src="{{member?.photoUrl || './assets/user.png'}}">
+<div *ngIf="member">
+    <img src="{{member.photoUrl || './assets/user.png'}}">
 
-
-<tabset>
-    <tab heading="Data">
-        <p>{{member?.nickName}}</p>
-        <p>@{{member?.userName}}</p>
-        <p>{{member?.accountCreationDate}}</p>
-        <p>{{member?.age}}</p>
-        <p>{{member?.city}}</p>
-        <p>{{member?.country}}</p>
-        <p>{{member?.description}}</p>
-        <p>{{member?.gender}}</p>
-        <p>{{member?.lastActive}}</p>
-    </tab>
-    <tab heading="Photos">
-        <div *ngFor="let photo of member?.photos">
-            <img src="{{photo.url}}">
-        </div>
-    </tab>
-</tabset>
+    <tabset>
+        <tab heading="Data">
+            <p>{{member.userName}}</p>
+            <p>@{{member.nickName}}</p>
+            <p>{{member.accountCreationDate}}</p>
+            <p>{{member.age}}</p>
+            <p>{{member.city}}</p>
+            <p>{{member.country}}</p>
+            <p>{{member.description}}</p>
+            <p>{{member.gender}}</p>
+            <p>{{member.lastActive}}</p>
+        </tab>
+        <tab heading="Photos">
+            <div *ngFor="let photo of member?.photos">
+                <img src="{{photo.url}}">
+            </div>
+        </tab>
+    </tabset>
+</div>

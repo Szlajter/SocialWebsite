@@ -18,10 +18,10 @@ export class ProfilePageComponent implements OnInit {
   }
 
   loadMember() {
-    const username = this.route.snapshot.paramMap.get('username')
+    const username = this.route.snapshot.paramMap.get('username');
     if (!username) return;
-    this.memberService.getMember(username).subscribe({
-      next: member => this.member = member
-    });
+    this.memberService.getMember(username).subscribe(member => {
+      this.member = member;
+    })
   }
 }

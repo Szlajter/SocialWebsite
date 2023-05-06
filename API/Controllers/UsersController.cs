@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using API.Data;
 using API.DTOs;
 using API.Entities;
@@ -5,6 +6,7 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
@@ -55,6 +57,25 @@ namespace API.Controllers
                 .Where(x => x.UserName == username)
                 .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
                 .SingleOrDefaultAsync();
+        }
+
+        [HttpPut]
+        public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
+        {
+            var username = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            //not using getUserByUsername because i need User not memberDto
+            var user = await _context.Users
+                .Where(x => x.UserName == username)
+                .SingleOrDefaultAsync();
+
+            if (user == null) return NotFound();
+
+            //updates by overriding
+            _mapper.Map(memberUpdateDto, user);
+
+            if (await _context.SaveChangesAsync() > 0) return NoContent();
+
+            return BadRequest("User update failed");
         }
     }
 }

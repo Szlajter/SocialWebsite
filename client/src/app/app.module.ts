@@ -18,6 +18,8 @@ import { MembersPageComponent } from './components/members-page/members-page.com
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { MemberCardComponent } from './components/member-card/member-card.component';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { EditProfilePageComponent } from './components/edit-profile-page/edit-profile-page.component';
+import { LoadingInterceptor } from './interceptors/loading.interceptor';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
     ServerErrorPageComponent,
     MembersPageComponent,
     ProfilePageComponent,
-    MemberCardComponent
+    MemberCardComponent,
+    EditProfilePageComponent
   ],
   imports: [
     BrowserModule,
@@ -40,11 +43,11 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
     FormsModule,
     BrowserAnimationsModule,
     SharedModule,
-
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })
