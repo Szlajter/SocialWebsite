@@ -20,6 +20,8 @@ import { MemberCardComponent } from './components/member-card/member-card.compon
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { EditProfilePageComponent } from './components/edit-profile-page/edit-profile-page.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
+import { FileUploadModule } from 'ng2-file-upload';
+import { AvatarUploaderComponent } from './components/avatar-uploader/avatar-uploader.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,8 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
     MembersPageComponent,
     ProfilePageComponent,
     MemberCardComponent,
-    EditProfilePageComponent
+    EditProfilePageComponent,
+    AvatarUploaderComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,7 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    SharedModule,
+    SharedModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

@@ -1,5 +1,6 @@
 import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { FileUploader } from 'ng2-file-upload';
 import { ToastrService } from 'ngx-toastr';
 import { take } from 'rxjs';
 import { Member } from 'src/app/models/member';
@@ -22,9 +23,9 @@ export class EditProfilePageComponent implements OnInit {
   }
   member: Member | undefined;
   user: User | null = null;
-
+  
   constructor(private accountService: AccountService, private memberService: MembersService, private toastr: ToastrService) {
-    this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user)
+    this.accountService.currentUser$.pipe(take(1)).subscribe(user => this.user = user)  
   }
 
   ngOnInit(): void {
@@ -45,6 +46,5 @@ export class EditProfilePageComponent implements OnInit {
         this.editForm?.reset(this.member);
       }
     })
-
   }
 }

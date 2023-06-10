@@ -1,0 +1,14 @@
+<div class="row" *ngIf="member">
+    <div class="col-md-3">
+        <div ng2FileDrop
+             [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
+             (fileOver)="fileOverBase($event)"
+             [uploader]="uploader">
+             <!--  hiding input and invoking it's file upload function in an image, using template variable -->
+             <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickName}}" (click)="fileInput.click()" class="rounded-circle w-50">
+             <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+                  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+             </span>
+        </div>
+    </div>
+</div>

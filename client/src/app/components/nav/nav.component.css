@@ -1,0 +1,39 @@
+.dropdownButton
+{
+    display: flex;
+}
+
+.dropdownButton-text
+{
+    margin-left: 10px;
+    font-size: 16px;
+    text-align: left;
+    
+}
+
+.dropdownButton-nickname
+{
+    font-weight: bold;
+}
+
+.dropdownButton img
+{
+    max-height: 50px;
+}
+
+.dropdownButton:hover
+{
+    color: white;
+}
+
+.dropdownButton:hover img
+{
+    border: 1px solid white;
+}
+
+
+
+
+
+
+ 

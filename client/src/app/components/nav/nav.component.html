@@ -15,12 +15,18 @@
           </ng-container>
         </ul>
         
-        <div class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
-          <button id="button-basic" dropdownToggle type="button" class="btn btn-secondary dropdown-toggle">Account</button> 
+        <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
+          <button dropdownToggle type="button" class="btn dropdownButton">
+            <img src="{{user.photoUrl}}" class="rounded-circle">
+              <span class="dropdownButton-text">
+                <span class="dropdownButton-nickname">{{user.nickname}}</span> <br>
+                <span class="dropdownButton-username">@{{user.username}}</span> 
+              </span>
+          </button> 
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" routerLink="/edit-profile-page">Edit Profile</a>
             <a class="dropdown-item" (click)="logout()">Logout</a>
-          </div>"
+          </div>
         </div>
 
         <div *ngIf="!(accountService.currentUser$ | async)">

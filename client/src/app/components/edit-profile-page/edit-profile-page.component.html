@@ -1,13 +1,16 @@
+<label>profile picture</label>
+    <app-avatar-uploader [member]='member'></app-avatar-uploader>
+
 <form *ngIf="member" #editForm="ngForm" (ngSubmit)="updateMember()">
     <label>nickname</label>
     <input type="text" [(ngModel)]="member.nickName" name="nickName" class="form-control">  
-    <label>city</label>
-    <input type="text" [(ngModel)]="member.city" name="city" class="form-control">    
-    <label>country</label>
-    <input type="text" [(ngModel)]="member.country" name="country" class="form-control">      
-    <label>description</label>
-    <textarea type="text" [(ngModel)]="member.description" name="description" class="form-control" rows="6"></textarea>
-    <button type="submit" [disabled]="!editForm.dirty" class="btn btn-success col-12 mt-5" >Update Profile</button>
+        <label>city</label>
+        <input type="text" [(ngModel)]="member.city" name="city" class="form-control">    
+        <label>country</label>
+        <input type="text" [(ngModel)]="member.country" name="country" class="form-control">      
+        <label>description</label>
+        <textarea type="text" [(ngModel)]="member.description" name="description" class="form-control" rows="6"></textarea>
+        <button type="submit" [disabled]="!editForm.dirty" class="btn btn-success col-12 mt-5" >Update Profile</button>
 </form>   
-        
-    
+
+
