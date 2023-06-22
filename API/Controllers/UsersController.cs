@@ -64,13 +64,18 @@ namespace API.Controllers
                 .SingleOrDefaultAsync();
         }
 
+        private async Task<User> GetFullUserByUsername(string username)
+        {
+            return await _context.Users
+                .Include(p => p.Photos)
+                .SingleOrDefaultAsync(x => x.UserName == User.GetUsername());
+        }
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
             //not using getUserByUsername because i need User entity, not memberDto
-            var user = await _context.Users
-                .Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == User.GetUsername());
+            var user = await GetFullUserByUsername(User.GetUsername());
 
             if (user == null) return NotFound();
 
@@ -85,9 +90,7 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
-            var user = await _context.Users
-                .Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == User.GetUsername());
+            var user = await GetFullUserByUsername(User.GetUsername());
 
             if (user == null) return NotFound();
 
@@ -114,9 +117,7 @@ namespace API.Controllers
         [HttpPost("add-profile-picture")]
         public async Task<ActionResult<PhotoDto>> AddProfilePicture(IFormFile file)
         {
-            var user = await _context.Users
-                .Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == User.GetUsername());
+            var user = await GetFullUserByUsername(User.GetUsername());
 
             if (user == null) return NotFound();
 
@@ -144,7 +145,34 @@ namespace API.Controllers
             }
 
             return BadRequest("Something went wrong while adding a profile picture");
+        }
 
+        [HttpDelete("delete-photo/{photoId}")]
+        public async Task<ActionResult> DeletePicture(int photoId)
+        {
+            var user = await GetFullUserByUsername(User.GetUsername());
+
+            if (user == null) return NotFound();
+
+            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+
+            if(photo == null) return NotFound();
+
+            //removing only photos that are in cloudinary
+            if(photo.PublicId != null)
+            {
+                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+                if(result.Error != null) return BadRequest(result.Error.Message);
+            }
+
+            user.Photos.Remove(photo);
+
+            if (await _context.SaveChangesAsync() > 0)
+            {
+                return Ok();
+            }
+
+            return BadRequest("Something went wrong while deleting a picture");
         }
     }
 }

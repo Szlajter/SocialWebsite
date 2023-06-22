@@ -1,6 +1,5 @@
 <label>profile picture</label>
     <app-avatar-uploader [member]='member'></app-avatar-uploader>
-
 <form *ngIf="member" #editForm="ngForm" (ngSubmit)="updateMember()">
     <label>nickname</label>
     <input type="text" [(ngModel)]="member.nickName" name="nickName" class="form-control">  
@@ -13,4 +12,14 @@
         <button type="submit" [disabled]="!editForm.dirty" class="btn btn-success col-12 mt-5" >Update Profile</button>
 </form>   
 
-
+<div *ngIf="member" class="photoGallery">
+    <div *ngFor="let photo of member.photos">
+        <div class="container" (click)="removePhoto.click()">
+            <img src="{{photo.url}}" alt="user's photo" class="img-thumbnail mb-1 w-15">
+            <i class="fa fa-trash fa-3x" aria-hidden="true"></i>
+            <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
+                <button class="btn btn-sm" (click)="deletePhoto(photo.id)" [disabled]="photo.isProfilePicture" #removePhoto>Delete</button>
+            </span>
+        </div>
+    </div>
+</div>

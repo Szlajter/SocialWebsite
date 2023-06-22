@@ -42,8 +42,22 @@ export class EditProfilePageComponent implements OnInit {
   updateMember() {
     this.memberService.updateMember(this.editForm?.value).subscribe({
       next: () => {
+        if(this.member && this.user) {
+          this.user.nickname = this.member.nickName;
+          this.accountService.setCurrentUser(this.user);
+        }
         this.toastr.success("Profile updated");
         this.editForm?.reset(this.member);
+      }
+    })
+  }
+
+  deletePhoto(photoId: number) {
+    this.memberService.deletePhoto(photoId).subscribe({
+      next: () => {
+        if(this.member) {
+          this.member.photos = this.member.photos.filter(x => x.id != photoId);
+        }
       }
     })
   }

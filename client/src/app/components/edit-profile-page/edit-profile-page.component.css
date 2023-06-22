@@ -1,3 +1,36 @@
-.profile-picture{
-    filter: brightness(70%);
+.photoGallery
+{
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 250px;
+}
+
+.container img
+{
+    width: 150px;
+    height: auto;
+}
+
+.container:hover
+{
+    filter: grayscale(100%);
+    cursor: pointer;
+}
+
+.container:hover i
+{
+    visibility: visible;
+}
+
+.container 
+{
+    position: relative;
+}
+
+.container i {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%); 
+    visibility: hidden;
 }
