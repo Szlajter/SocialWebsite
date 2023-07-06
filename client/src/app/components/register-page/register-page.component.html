@@ -1,9 +1,10 @@
 <div class="row justify-content-center">
     <div class="col-4">
-        <form #registerForm="ngForm" (ngSubmit)="register()" autocomplete="off">
+        <form [formGroup]="registerForm" (ngSubmit)="register()" autocomplete="off">
             <h1 class="text-center text-primary">Sign up</h1>
-                <input name="username" [(ngModel)]="model.username" class="form-control mb-3" type="text" placeholder="Username">
-                <input name="password" [(ngModel)]="model.password" class="form-control mb-3" type="password" placeholder="Password">
+                <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'Username'"></app-text-input>  
+                <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'" [type]="'password'"></app-text-input>  
+                <app-text-input [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'"></app-text-input>  
             <div class="text-center">
                 <button class="btn btn-primary" type="submit">Register</button>
                 <button class="btn" type="button" routerLink="">Cancel</button>
@@ -11,3 +12,7 @@
         </form>
     </div>
 </div>
+
+<!-- remove later-->
+<p> Form value {{registerForm.value | json}}</p>
+<p> Form status {{registerForm.status | json}}</p>
