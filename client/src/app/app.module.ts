@@ -20,9 +20,10 @@ import { MemberCardComponent } from './components/member-card/member-card.compon
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
 import { EditProfilePageComponent } from './components/edit-profile-page/edit-profile-page.component';
 import { LoadingInterceptor } from './interceptors/loading.interceptor';
-import { FileUploadModule } from 'ng2-file-upload';
 import { AvatarUploaderComponent } from './components/avatar-uploader/avatar-uploader.component';
 import { TextInputComponent } from './components/forms/text-input/text-input.component';
+import { DatepickerComponent } from './components/forms/datepicker/datepicker.component';
+
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { TextInputComponent } from './components/forms/text-input/text-input.com
     EditProfilePageComponent,
     AvatarUploaderComponent,
     TextInputComponent,
+    DatepickerComponent,
   ],
   imports: [
     BrowserModule,

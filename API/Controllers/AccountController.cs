@@ -4,6 +4,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,9 +15,11 @@ namespace API.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public AccountController(ApplicationDbContext context, ITokenService tokenService)
+        public AccountController(ApplicationDbContext context, ITokenService tokenService, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
             _tokenService = tokenService;
         }
@@ -28,14 +31,13 @@ namespace API.Controllers
             if(UserExists(registerDto.Username)) 
                 return BadRequest("Username is already taken.");
 
+            var user = _mapper.Map<User>(registerDto);
+
             using var hmac = new HMACSHA512(); 
 
-            var user = new User
-            {
-                UserName = registerDto.Username.ToLower(),
-                PasswordSalt = hmac.Key,
-                PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password))
-            };
+            user.UserName = registerDto.Username.ToLower();
+            user.PasswordSalt = hmac.Key;
+            user.PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerDto.Password));
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -43,8 +45,7 @@ namespace API.Controllers
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user),
-                Nickname = user.NickName
+                Token = _tokenService.CreateToken(user)
             };
         }
 
