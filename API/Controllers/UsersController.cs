@@ -3,6 +3,7 @@ using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
 using AutoMapper;
@@ -30,14 +31,19 @@ namespace API.Controllers
         
         //using ProjectTo() to send shorter select clauses only for memberDto columns instead of whole user entity
         [HttpGet]
-        public async Task<IEnumerable<MemberDto>> GetUsers()
+        public async Task<ActionResult<PaginatedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
             // var users = await _context.Users.Include(p => p.Photos).ToListAsync();
             // return _mapper.Map<IEnumerable<MemberDto>>(users);
 
-            return await _context.Users
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var query = _context.Users
+                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider);
+
+            var users = await PaginatedList<MemberDto>.CreateAsync(query, userParams.PageIndex, userParams.PageSize);
+                
+            Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, users.PageSize, users.TotalCount, users.TotalPages));
+
+            return Ok(users);
         }
         
         [HttpGet("{id:int}")]
