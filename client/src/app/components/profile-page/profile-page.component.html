@@ -5,13 +5,14 @@
         <tab heading="Data">
             <p>{{member.userName}}</p>
             <p>@{{member.nickName}}</p>
-            <p>{{member.accountCreationDate}}</p>
             <p>{{member.age}}</p>
             <p>{{member.city}}</p>
             <p>{{member.country}}</p>
             <p>{{member.description}}</p>
             <p>{{member.gender}}</p>
-            <p>{{member.lastActive}}</p>
+            <p>{{member.accountCreationDate | date: 'dd MMM yyyy'}}</p>
+            <!-- using angular-ecmascript-intl for now, but i will change it later because it shows weird statuses like "in 1 week" instead of "1 week ago"-->
+            <p>{{member.lastActive | intlRelativeTime}}</p>
         </tab>
         <tab heading="Photos">
             <div *ngFor="let photo of member?.photos">

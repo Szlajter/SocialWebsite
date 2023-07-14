@@ -7,6 +7,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { IntlModule } from 'angular-ecmascript-intl';
+
 
 @NgModule({
   declarations: [],
@@ -22,7 +24,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
       positionClass: 'toast-bottom-right'
     }),
     BsDatepickerModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    IntlModule
   ],
   exports: [
     BsDropdownModule,
@@ -31,7 +34,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     FileUploadModule,
     NgxSpinnerModule,
     BsDatepickerModule,
-    PaginationModule
+    PaginationModule,
+    IntlModule
   ]
 })
 export class SharedModule { }

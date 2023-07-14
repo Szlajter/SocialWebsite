@@ -29,17 +29,20 @@ namespace API.Controllers
             _mapper = mapper;
         }        
         
-        //using ProjectTo() to send shorter select clauses only for memberDto columns instead of whole user entity
+         //ProjectTo() is used to make query shorter (only MemberDto columns)
+         //returns users expect logged one
         [HttpGet]
         public async Task<ActionResult<PaginatedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
-            // var users = await _context.Users.Include(p => p.Photos).ToListAsync();
-            // return _mapper.Map<IEnumerable<MemberDto>>(users);
+            var user = await GetFullUserByUsername(User.GetUsername());
+            userParams.currentUsername = user.UserName;
+            
+            var query = _context.Users.AsQueryable();
+            query = query.Where(u => u.UserName != userParams.currentUsername);
 
-            var query = _context.Users
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider);
-
-            var users = await PaginatedList<MemberDto>.CreateAsync(query, userParams.PageIndex, userParams.PageSize);
+            var users = await PaginatedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+                        userParams.PageIndex, 
+                        userParams.PageSize);
                 
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, users.PageSize, users.TotalCount, users.TotalPages));
 
@@ -80,7 +83,6 @@ namespace API.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            //not using getUserByUsername because i need User entity, not memberDto
             var user = await GetFullUserByUsername(User.GetUsername());
 
             if (user == null) return NotFound();

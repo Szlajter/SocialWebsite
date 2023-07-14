@@ -23,6 +23,8 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { AvatarUploaderComponent } from './components/avatar-uploader/avatar-uploader.component';
 import { TextInputComponent } from './components/forms/text-input/text-input.component';
 import { DatepickerComponent } from './components/forms/datepicker/datepicker.component';
+import { INTL_LOCALES } from 'angular-ecmascript-intl';
+
 
 
 @NgModule({
@@ -41,7 +43,7 @@ import { DatepickerComponent } from './components/forms/datepicker/datepicker.co
     EditProfilePageComponent,
     AvatarUploaderComponent,
     TextInputComponent,
-    DatepickerComponent,
+    DatepickerComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,9 @@ import { DatepickerComponent } from './components/forms/datepicker/datepicker.co
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true}
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
+    //sets timeago pipe language
+    {provide: INTL_LOCALES, useValue: "en-US",}
   ],
   bootstrap: [AppComponent]
 })

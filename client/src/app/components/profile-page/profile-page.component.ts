@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { IntlRelativeTimePipeOptions } from 'angular-ecmascript-intl';
 import { Member } from 'src/app/models/member';
 import { MembersService } from 'src/app/services/members.service';
 
