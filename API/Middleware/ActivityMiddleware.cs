@@ -22,7 +22,7 @@ namespace API.Middleware
 
             if(!context.User.Identity.IsAuthenticated) return;
 
-            var userId = int.Parse(context.User.GetUserId());
+            var userId = context.User.GetUserId();
             using (var dbContext = context.RequestServices.GetRequiredService<ApplicationDbContext>())
             {
                 var user = dbContext.Users.Where(u => u.Id == userId).FirstOrDefault();

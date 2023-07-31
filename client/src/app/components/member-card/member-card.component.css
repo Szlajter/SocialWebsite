@@ -3,15 +3,17 @@
     border: none;
     margin-left: auto;
     margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
 }
 
 .card a{
     color: black;
     text-decoration: none;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    width: 100%;
 }
 
 .card img{
@@ -23,6 +25,7 @@
     margin-left: 10px;
     margin-right: 25px
 }
+
 
 
 

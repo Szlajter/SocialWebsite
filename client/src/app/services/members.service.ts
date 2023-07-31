@@ -78,6 +78,26 @@ export class MembersService {
     return this.http.delete(this.baseUrl + 'users/delete-photo/' + photoId);
   }
 
+  addFollow(username: string) {
+    return this.http.post(this.baseUrl + 'users/follow/' + username, {});
+  }
+
+  getFollowers(pageNumber: number, pageSize: number) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users/followers', params);
+  }
+
+  getFollowing(pageNumber: number, pageSize: number) {
+    let params = this.getPaginationHeaders(pageNumber, pageSize);
+
+    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users/following', params);
+  }
+
+  deleteFollow(username: string) {
+    return this.http.delete(this.baseUrl + 'users/unfollow/' + username, {});
+  }
+
   private getPaginatedResult<T>(url: string, params: HttpParams) {
     const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>;
     

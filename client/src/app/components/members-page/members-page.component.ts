@@ -14,7 +14,6 @@ import { MembersService } from 'src/app/services/members.service';
 export class MembersPageComponent implements OnInit { 
   //members$: Observable<Member[]> | undefined;
   members: Member[] = [];
-  user: User | undefined;
   userParams: UserParams | undefined;
   pagination: Pagination | undefined;
 

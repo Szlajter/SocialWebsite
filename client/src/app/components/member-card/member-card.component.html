@@ -4,9 +4,10 @@
             <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickName}}" class="rounded-circle">
             <span>{{member.nickName}}</span>
         </div>
-        <div class="card-right">
-            <button >Obserwuj</button>
-            <button >Wyślij wiadomość</button>
-        </div>
     </a>
+    <div class="card-right">
+        <button (click)="addFollow(member)">Follow</button>
+        <button (click)="deleteFollow(member)">Unfollow</button>
+        <button >Send message</button>
+    </div>
 </div>
