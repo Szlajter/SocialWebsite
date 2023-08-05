@@ -68,7 +68,7 @@ namespace API.Controllers
                 {
                     Username = user.UserName,
                     Token = _tokenService.CreateToken(user),
-                    PhotoUrl = user.Photos.FirstOrDefault(x => x.isProfilePicture)?.Url,
+                    PhotoUrl = user.Photos.FirstOrDefault(x => x.IsProfilePicture)?.Url,
                     Nickname = user.NickName
                 };
             }

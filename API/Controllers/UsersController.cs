@@ -19,79 +19,46 @@ namespace API.Controllers
     [Authorize]
     public class UsersController: BaseApiController
     { 
-        private readonly ApplicationDbContext _context;
+        private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IPhotoService _photoService;
 
-        public UsersController(ApplicationDbContext context, IMapper mapper, IPhotoService photoService)
+        public UsersController(IUserRepository userRepository, IMapper mapper, IPhotoService photoService)
         {
-            _photoService = photoService;
-            _context = context;
+            _userRepository = userRepository;
             _mapper = mapper;
+            _photoService = photoService;
         }        
         
-         //ProjectTo() is used to make query shorter (only MemberDto columns)
-         //returns users expect logged one
         [HttpGet]
         public async Task<ActionResult<PaginatedList<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
-            var user = await GetFullUserByUsername(User.GetUsername());
-            userParams.currentUsername = user.UserName;
-            
-            var query = _context.Users.AsQueryable();
-            query = query.Where(u => u.UserName != userParams.currentUsername);
+            userParams.CurrentUsername = User.GetUsername();
 
-            var users = await PaginatedList<MemberDto>.CreateAsync(query.ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
-                        userParams.PageIndex, 
-                        userParams.PageSize);
+            var users = await _userRepository.GetMembersAsync(userParams);
                 
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, users.PageSize, users.TotalCount, users.TotalPages));
 
             return Ok(users);
         }
-        
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<MemberDto>> GetUser(int id)
-        {
-            // var user = await _context.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.Id == id);
-            // return _mapper.Map<MemberDto>(user);
-
-            return await _context.Users
-                .Where(x => x.Id == id)
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
-        }
 
         [HttpGet("{username}")]
-        public async Task<ActionResult<MemberDto>> GetUserByUsername(string username)
+        public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            // var user = await _context.Users.Include(p => p.Photos).SingleOrDefaultAsync(x => x.UserName == username);
-            // return _mapper.Map<MemberDto>(user);
-
-            return await _context.Users
-                .Where(x => x.UserName == username)
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider)
-                .SingleOrDefaultAsync();
-        }
-
-        private async Task<User> GetFullUserByUsername(string username)
-        {
-            return await _context.Users
-                .Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == username);
+            return await _userRepository.GetMemberAsync(username);
         }
 
         [HttpPut]
         public async Task<ActionResult> UpdateUser(MemberUpdateDto memberUpdateDto)
         {
-            var user = await GetFullUserByUsername(User.GetUsername());
-
-            if (user == null) return NotFound();
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             //updates by overriding
             _mapper.Map(memberUpdateDto, user);
 
-            if (await _context.SaveChangesAsync() > 0) return NoContent();
+            _userRepository.Update(user);
+
+            if (await _userRepository.SaveAllAsync()) return NoContent();
 
             return BadRequest("User update failed");
         }
@@ -99,7 +66,7 @@ namespace API.Controllers
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
-            var user = await GetFullUserByUsername(User.GetUsername());
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();
 
@@ -115,9 +82,9 @@ namespace API.Controllers
 
             user.Photos.Add(photo);
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (await _userRepository.SaveAllAsync())
             {
-                return CreatedAtAction(nameof(GetUserByUsername), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
+                return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
             }
 
             return BadRequest("Something went wrong while adding a new photo");
@@ -126,14 +93,14 @@ namespace API.Controllers
         [HttpPost("add-profile-picture")]
         public async Task<ActionResult<PhotoDto>> AddProfilePicture(IFormFile file)
         {
-            var user = await GetFullUserByUsername(User.GetUsername());
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();
 
-            var currentProfilePicture = user.Photos.FirstOrDefault(x => x.isProfilePicture == true);
+            var currentProfilePicture = user.Photos.FirstOrDefault(x => x.IsProfilePicture == true);
 
             if(currentProfilePicture != null)
-                currentProfilePicture.isProfilePicture = false;
+                currentProfilePicture.IsProfilePicture = false;
 
             var result = await _photoService.AddPhotoAsync(file);
 
@@ -142,15 +109,15 @@ namespace API.Controllers
             var photo = new Photo
             {
                 Url = result.SecureUrl.AbsoluteUri,
-                isProfilePicture = true,
+                IsProfilePicture = true,
                 PublicId = result.PublicId
             };
 
             user.Photos.Add(photo);
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (await _userRepository.SaveAllAsync())
             {
-                return CreatedAtAction(nameof(GetUserByUsername), new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
+                return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
             }
 
             return BadRequest("Something went wrong while adding a profile picture");
@@ -159,7 +126,7 @@ namespace API.Controllers
         [HttpDelete("delete-photo/{photoId}")]
         public async Task<ActionResult> DeletePicture(int photoId)
         {
-            var user = await GetFullUserByUsername(User.GetUsername());
+            var user = await _userRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();
 
@@ -176,129 +143,12 @@ namespace API.Controllers
 
             user.Photos.Remove(photo);
 
-            if (await _context.SaveChangesAsync() > 0)
+            if (await _userRepository.SaveAllAsync())
             {
                 return Ok();
             }
 
             return BadRequest("Something went wrong while deleting a picture");
-        }
-
-        [HttpPost("follow/{username}")]
-        public async Task<ActionResult> AddFollower(string username)
-        {
-            var sourceUserId = User.GetUserId();
-            var userToFollow = await GetFullUserByUsername(username);
-            var sourceUser = await _context.Users
-                .Include(x => x.Followers)
-                .FirstOrDefaultAsync(x => x.Id == sourceUserId);
-
-            if(userToFollow == null) return NotFound();
-            if(sourceUser.UserName == username) return BadRequest("Impossible to follow own profile");            
-
-            var userFollow = await _context.Follows.FindAsync(sourceUserId, userToFollow.Id);
-            if(userFollow != null) return BadRequest("User is already followed");
-
-            userFollow = new UserFollow
-            {
-                SourceUserId = sourceUserId,
-                TargetUserId = userToFollow.Id
-            };
-
-            sourceUser.Following.Add(userFollow);
-
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                return Ok();
-            }
-            return BadRequest("Failed to follow");
-        }
-
-        [HttpGet("following")]
-        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowing([FromQuery]UserParams userParams)
-        {
-            var users = _context.Users
-                .OrderBy(u => u.UserName)
-                .AsQueryable();
-
-            var currentUserId = User.GetUserId();
-            var follows = _context.Follows
-                .Where(follow => follow.SourceUserId == currentUserId)
-                .AsQueryable();
-
-            users = follows.Select(follow => follow.TargetUser);
-
-            var followedUsers = users.Select(user => new FollowDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                NickName = user.NickName,
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.isProfilePicture).Url
-            });
-
-            var paginatedFollowedUsers = await PaginatedList<FollowDto>.CreateAsync(followedUsers, userParams.PageIndex, userParams.PageSize);
-
-            Response.AddPaginationHeader(new PaginationHeader(paginatedFollowedUsers.PageIndex, 
-                                                              paginatedFollowedUsers.PageSize, 
-                                                              paginatedFollowedUsers.TotalCount, 
-                                                              paginatedFollowedUsers.TotalPages));
-
-            return  Ok(paginatedFollowedUsers);
-        }
-
-        [HttpGet("followers")]
-        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowers([FromQuery]UserParams userParams)
-        {
-            var users = _context.Users
-                .OrderBy(u => u.UserName)
-                .AsQueryable();
-
-            var currentUserId = User.GetUserId();
-            var follows = _context.Follows
-                .Where(follow => follow.TargetUserId == currentUserId)
-                .AsQueryable();
-
-            users = follows.Select(follow => follow.SourceUser);
-
-            var followingUsers = users.Select(user => new FollowDto
-            {
-                Id = user.Id,
-                UserName = user.UserName,
-                NickName = user.NickName,
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.isProfilePicture).Url
-            });
-
-            var paginatedFollowingUsers = await PaginatedList<FollowDto>.CreateAsync(followingUsers, userParams.PageIndex, userParams.PageSize);
-
-            Response.AddPaginationHeader(new PaginationHeader(paginatedFollowingUsers.PageIndex, 
-                                                              paginatedFollowingUsers.PageSize, 
-                                                              paginatedFollowingUsers.TotalCount, 
-                                                              paginatedFollowingUsers.TotalPages));
-            return Ok(paginatedFollowingUsers);
-        }
-
-        [HttpDelete("unfollow/{username}")]
-        public async Task<ActionResult> DeleteFollow(string username)
-        {
-            var sourceUserId = User.GetUserId();
-            var userToUnfollow = await GetFullUserByUsername(username);
-            var sourceUser = await _context.Users
-                .Include(x => x.Followers)
-                .FirstOrDefaultAsync(x => x.Id == sourceUserId);
-
-            if(userToUnfollow == null) return NotFound();
-            if(sourceUser.UserName == username) return BadRequest("Impossible to unfollow own profile");            
-
-            var userFollow = await _context.Follows.FindAsync(sourceUserId, userToUnfollow.Id);
-            if(userFollow == null) return BadRequest("User is already unfollowed");
-
-            sourceUser.Following.Remove(userFollow);
-
-            if (await _context.SaveChangesAsync() > 0)
-            {
-                return Ok();
-            }
-            return BadRequest("Failed to unfollow");
         }
     }
 }

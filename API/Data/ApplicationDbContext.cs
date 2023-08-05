@@ -12,11 +12,12 @@ namespace API.Data
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserFollow> Follows { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
+            
             builder.Entity<UserFollow>()
                 .HasKey(k => new {k.SourceUserId, k.TargetUserId});
 
@@ -31,6 +32,16 @@ namespace API.Data
                 .WithMany(f => f.Followers)
                 .HasForeignKey(s => s.TargetUserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Recipient)
+                .WithMany(f => f.MessagesReceived)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Message>()
+                .HasOne(u => u.Sender)
+                .WithMany(f => f.MessagesSent)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

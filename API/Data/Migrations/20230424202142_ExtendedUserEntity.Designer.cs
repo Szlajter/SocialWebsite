@@ -35,7 +35,7 @@ namespace API.Data.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("isProfilePicture")
+                    b.Property<bool>("IsProfilePicture")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

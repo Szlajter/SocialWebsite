@@ -11,6 +11,7 @@ namespace API.Helpers
             set => _pageSize = (value > MaxPageSize) ? MaxPageSize: value;
         }
         
-        public string currentUsername { get; set; }       
+        public string CurrentUsername { get; set; }      
+        public int UserId { get; set; } 
     }
 }
