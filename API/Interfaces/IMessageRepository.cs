@@ -9,8 +9,8 @@ namespace API.Interfaces
         void AddMessage(Message message);
         void DeleteMessage(Message message);
         Task<Message> GetMessage(int id);
-        Task<PaginatedList<MessageDto>> GetMessages();
-        Task<IEnumerable<MessageDto>> GetConversation(int currentUserId, int RecipientId);
+        Task<PaginatedList<MessageDto>> GetMessages(MessageParams messageParams);
+        Task<IEnumerable<MessageDto>> GetConversation(string currentUserName, string recipientUsername);
         Task<bool> SaveAllAsync();
     }
 }
