@@ -24,6 +24,8 @@ import { AvatarUploaderComponent } from './components/avatar-uploader/avatar-upl
 import { TextInputComponent } from './components/forms/text-input/text-input.component';
 import { DatepickerComponent } from './components/forms/datepicker/datepicker.component';
 import { INTL_LOCALES } from 'angular-ecmascript-intl';
+import { MessagesComponent } from './components/messages/messages.component';
+import { MessageCardComponent } from './components/message-card/message-card.component';
 
 
 
@@ -43,7 +45,9 @@ import { INTL_LOCALES } from 'angular-ecmascript-intl';
     EditProfilePageComponent,
     AvatarUploaderComponent,
     TextInputComponent,
-    DatepickerComponent
+    DatepickerComponent,
+    MessagesComponent,
+    MessageCardComponent
   ],
   imports: [
     BrowserModule,

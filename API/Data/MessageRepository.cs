@@ -29,7 +29,7 @@ namespace API.Data
             _context.Messages.Remove(message);
         }
         
-        //messages between 2 users
+        //messages between 2 users  
         public async Task<IEnumerable<MessageDto>> GetConversation(string currentUserName, string recipientUsername)
         {
             var messages = await _context.Messages
@@ -69,13 +69,6 @@ namespace API.Data
                 .OrderByDescending(x => x.MessageSent)
                 .AsQueryable();
 
-            query = messageParams.Container switch
-            {
-                "Inbox" => query.Where(u => u.RecipientUsername == messageParams.Username),
-                "Outbox" => query.Where(u => u.SenderUsername == messageParams.Username),
-                _ => query.Where(u => u.RecipientUsername == messageParams.Username && u.DateRead == null) 
-            };
-
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
 
             return await PaginatedList<MessageDto>.CreateAsync(messages, messageParams.PageIndex, messageParams.PageSize);
@@ -84,6 +77,23 @@ namespace API.Data
         public async Task<bool> SaveAllAsync()
         {
             return await _context.SaveChangesAsync() > 0;
+        }
+
+        //returns a list of the latest messages in each conversation
+        //I should refactor it later. Make it so it returns some smaller dto or something
+        public async Task<IEnumerable<MessageDto>> GetRecentConversations(string username)
+        {
+            var messages = await (from m in _context.Messages
+                           .Include(u => u.Sender).ThenInclude(p => p.Photos)
+                           .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+                           let msgTo = m.RecipientUsername == username
+                           let msgFrom = m.SenderUsername == username
+                           where msgTo || msgFrom
+                           group m by msgTo ? m.SenderUsername : m.RecipientUsername into g
+                           select g.OrderByDescending(x => x.MessageSent).First())
+                           .ToListAsync();
+                          
+            return _mapper.Map<IEnumerable<MessageDto>>(messages);
         }
     }
 }

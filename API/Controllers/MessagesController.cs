@@ -77,5 +77,13 @@ namespace API.Controllers
 
             return Ok(await _messageRepository.GetConversation(currentUsername, username));
         }
+
+        [HttpGet("conversations")]
+        public async Task<ActionResult<IEnumerable<MessageDto>>> GetRecentConversations()
+        {
+            var currentUsername = User.GetUsername(); 
+
+            return Ok(await _messageRepository.GetRecentConversations(currentUsername));
+        }
     }
 }

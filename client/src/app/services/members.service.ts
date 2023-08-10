@@ -7,6 +7,7 @@ import { PaginatedResult } from '../models/pagination';
 import { UserParams } from '../models/userParams';
 import { AccountService } from './account.service';
 import { User } from '../models/user';
+import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +35,8 @@ export class MembersService {
     return this.userParams;
   }
 
-  setUserParams(params: UserParams) {
-    this.userParams = params;
+  setUserParams(userParams: UserParams) {
+    this.userParams = userParams;
   }
 
   getMembers(userParams: UserParams) {
@@ -43,9 +44,9 @@ export class MembersService {
     if (response)
       return of(response);
 
-    let params = this.getPaginationHeaders(userParams.pageIndex, userParams.pageSize);
+    let params = getPaginationHeaders(userParams.pageIndex, userParams.pageSize);
 
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'users', params).pipe(
+    return getPaginatedResult<Member[]>(this.baseUrl + 'users', params, this.http).pipe(
       map(response => {
         this.memberCache.set(Object.values(userParams).join('-'), response);
         return response;  
@@ -83,44 +84,18 @@ export class MembersService {
   }
 
   getFollowers(pageNumber: number, pageSize: number) {
-    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    let params = getPaginationHeaders(pageNumber, pageSize);
 
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'follows/followers', params);
+    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/followers', params, this.http);
   }
 
   getFollowing(pageNumber: number, pageSize: number) {
-    let params = this.getPaginationHeaders(pageNumber, pageSize);
+    let params = getPaginationHeaders(pageNumber, pageSize);
 
-    return this.getPaginatedResult<Member[]>(this.baseUrl + 'follows/following', params);
+    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/following', params, this.http);
   }
 
   deleteFollow(username: string) {
     return this.http.delete(this.baseUrl + 'follows/unfollow/' + username, {});
   }
-
-  private getPaginatedResult<T>(url: string, params: HttpParams) {
-    const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>;
-    
-    return this.http.get<T>(url, { observe: 'response', params }).pipe(
-      map(response => {
-        if (response.body) {
-          paginatedResult.result = response.body;
-        }
-        const pagination = response.headers.get('Pagination');
-        if (pagination) {
-          paginatedResult.pagination = JSON.parse(pagination);  
-        }
-        return paginatedResult;
-      })
-    );
-  }
-  
-  private getPaginationHeaders(pageIndex: number, pageSize: number) {
-    let params = new HttpParams();
-
-    params = params.append("pageIndex", pageIndex);
-    params = params.append("pageSize", pageSize);
-    return params;
-  }
-
 }

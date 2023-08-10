@@ -12,6 +12,7 @@ import { ProfilePageComponent } from './components/profile-page/profile-page.com
 import { EditProfilePageComponent } from './components/edit-profile-page/edit-profile-page.component';
 import { authGuard } from './guards/auth.guard';
 import { PendingChangesGuard } from './guards/pending-changes.guard';
+import { MessagesComponent } from './components/messages/messages.component';
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
   {path: 'login-page', component: LoginPageComponent},
   {path: 'register-page', component: RegisterPageComponent},
   {path: 'members-page', component: MembersPageComponent},
+  {path: 'messages', component: MessagesComponent},
   {path: 'profile-page/:username', component: ProfilePageComponent},
   {path: 'test-page', component: TestPageComponent},
   {path: 'not-found-page', component: NotFoundPageComponent},
