@@ -1,19 +1,26 @@
 <div class="full-width">
     <div style="width: 18%; float: left;">
         <ul>
-            <li *ngFor="let chat of chats">
-                <img src="{{chat?.recipientPhotoUrl}}" alt="">
+            <!-- will change it later. It will return other dto so ifs will disappear-->
+            <li *ngFor="let chat of chats" (click)="setChattingWithUsername(chat)" (click)="this.currentConversation?.loadMessages()">
+                <img *ngIf="chat?.senderUsername == this.username; else senderPhoto" src="{{chat?.recipientPhotoUrl}}" alt="">
+                <ng-template #senderPhoto>
+                    <img src="{{chat?.senderPhotoUrl}}" alt="">
+                </ng-template>
                 <div>
-                    <h2>{{chat?.senderUsername}}</h2>
+                    <h2 *ngIf="chat?.senderUsername == this.username; else senderUsername">{{chat?.recipientUsername}}</h2>
+                    <ng-template #senderUsername>
+                        <h2>{{chat?.recipientUsername}}</h2>
+                    </ng-template>
                     <h3>
-                        dupa    
+                       {{chat?.senderUsername}}: {{ chat?.content }}  
                     </h3>
                 </div>
             </li>
         </ul>
     </div>
-    <div style="width: 82%; float: right;" >
-        d
+    <div style="width: 80%; float: left" >
+        <app-conversation [username]="this.chattingWithUsername"></app-conversation>
     </div>
 </div>
 

@@ -25,7 +25,7 @@ import { TextInputComponent } from './components/forms/text-input/text-input.com
 import { DatepickerComponent } from './components/forms/datepicker/datepicker.component';
 import { INTL_LOCALES } from 'angular-ecmascript-intl';
 import { MessagesComponent } from './components/messages/messages.component';
-import { MessageCardComponent } from './components/message-card/message-card.component';
+import { ConversationComponent } from './components/conversation/conversation.component';
 
 
 
@@ -47,7 +47,7 @@ import { MessageCardComponent } from './components/message-card/message-card.com
     TextInputComponent,
     DatepickerComponent,
     MessagesComponent,
-    MessageCardComponent
+    ConversationComponent,
   ],
   imports: [
     BrowserModule,

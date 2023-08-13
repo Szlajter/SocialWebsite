@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Message } from 'src/app/models/message';
 import { Pagination } from 'src/app/models/pagination';
+import { UserParams } from 'src/app/models/userParams';
 import { MessagesService } from 'src/app/services/messages.service';
+import { ConversationComponent } from '../conversation/conversation.component';
 
 @Component({
   selector: 'app-messages',
@@ -9,8 +11,10 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./messages.component.css']
 })
 export class MessagesComponent implements OnInit{
-  chats: Message[] | undefined
-  messages: Message[] | undefined;
+  @ViewChild(ConversationComponent) currentConversation: ConversationComponent | undefined;
+  chats: Message[] = [];
+  username: string | undefined;
+  chattingWithUsername: string | undefined;
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 5;
@@ -20,27 +24,27 @@ export class MessagesComponent implements OnInit{
 
   ngOnInit(): void {
       this.loadChats();
-  }
-
-  loadMessages() {
-    this.messageService.getMessages(this.pageNumber, this.pageSize).subscribe({
-      next: response => {
-        this.messages = response.result;
-        this.pagination = response.pagination;
-      }
-    })
+      this.getUsername();
   }
 
   pageChanged(event: any) {
     if(this.pageNumber != event.page) {
       this.pageNumber = event.page;
-      this.loadMessages();
     }
   }
 
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
-      this.chats = response;
+      this.chats = response;      
     })
+  }
+
+  getUsername() {
+    this.username = JSON.parse(localStorage.getItem('user')!).username;
+  }
+
+  //todo: make it less ugly
+  setChattingWithUsername(message: Message) {
+      this.chattingWithUsername = (message.senderUsername == this.username) ? message.recipientUsername : message.senderUsername;
   }
 }

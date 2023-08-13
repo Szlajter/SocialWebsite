@@ -41,7 +41,7 @@ namespace API.Data
                     m.RecipientUsername == recipientUsername &&
                     m.SenderUsername == currentUserName
                 )
-                .OrderByDescending(m => m.MessageSent)
+                .OrderBy(m => m.MessageSent)
                 .ToListAsync();
 
             var unreadMessages = messages.Where(m => m.DateRead == null 
@@ -79,19 +79,17 @@ namespace API.Data
             return await _context.SaveChangesAsync() > 0;
         }
 
-        //returns a list of the latest messages in each conversation
-        //I should refactor it later. Make it so it returns some smaller dto or something
+        //returns a list of the latest message in each conversation
+        //I should refactor it later. Make it so it returns some smaller dto
         public async Task<IEnumerable<MessageDto>> GetRecentConversations(string username)
         {
-            var messages = await (from m in _context.Messages
-                           .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                           .Include(u => u.Recipient).ThenInclude(p => p.Photos)
-                           let msgTo = m.RecipientUsername == username
-                           let msgFrom = m.SenderUsername == username
-                           where msgTo || msgFrom
-                           group m by msgTo ? m.SenderUsername : m.RecipientUsername into g
-                           select g.OrderByDescending(x => x.MessageSent).First())
-                           .ToListAsync();
+            var messages = await _context.Messages
+            .Include(u => u.Sender).ThenInclude(p => p.Photos)
+            .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+            .Where(m => m.RecipientUsername == username || m.SenderUsername == username)
+            .GroupBy(m => m.RecipientUsername == username ? m.SenderUsername : m.RecipientUsername)
+            .Select(g => g.OrderByDescending(m => m.MessageSent).First())   
+            .ToListAsync();
                           
             return _mapper.Map<IEnumerable<MessageDto>>(messages);
         }
