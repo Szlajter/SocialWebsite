@@ -7,19 +7,20 @@ import { MessagesService } from 'src/app/services/messages.service';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.css']
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent {
   @Input() username?: string;
+  @Input() chattingWithUsername?: string;
   messages: Message[] = []; 
 
   constructor(private messageService: MessagesService) { }
-
-  ngOnInit(): void {
+  
+  ngOnChanges(): void {
     this.loadMessages();
   }
 
-  loadMessages() {
-    if (this.username) {
-      this.messageService.getConversation(this.username).subscribe({
+  loadMessages() {  
+    if (this.chattingWithUsername) {
+      this.messageService.getConversation(this.chattingWithUsername).subscribe({
         next: messages => this.messages = messages
       })
     }

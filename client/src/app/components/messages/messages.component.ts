@@ -1,9 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Message } from 'src/app/models/message';
 import { Pagination } from 'src/app/models/pagination';
-import { UserParams } from 'src/app/models/userParams';
 import { MessagesService } from 'src/app/services/messages.service';
 import { ConversationComponent } from '../conversation/conversation.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-messages',
@@ -19,12 +19,12 @@ export class MessagesComponent implements OnInit{
   pageNumber = 1;
   pageSize = 5;
 
-  constructor(private messageService: MessagesService) {    
+  constructor(private messageService: MessagesService, private route: ActivatedRoute) {    
   }
 
   ngOnInit(): void {
+      this.username = JSON.parse(localStorage.getItem('user')!).username;
       this.loadChats();
-      this.getUsername();
   }
 
   pageChanged(event: any) {
@@ -35,16 +35,20 @@ export class MessagesComponent implements OnInit{
 
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
-      this.chats = response;      
+      this.chats = response;
+
+      this.route.queryParams.subscribe(params => {
+        this.chattingWithUsername = params['user'];
+      });
+      
+      if(this.chattingWithUsername === undefined)
+        this.setChattingWithUsername(this.chats[0]);
     })
   }
 
-  getUsername() {
-    this.username = JSON.parse(localStorage.getItem('user')!).username;
-  }
-
-  //todo: make it less ugly
   setChattingWithUsername(message: Message) {
       this.chattingWithUsername = (message.senderUsername == this.username) ? message.recipientUsername : message.senderUsername;
   }
+
+
 }

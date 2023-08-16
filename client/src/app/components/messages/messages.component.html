@@ -10,7 +10,7 @@
                 <div>
                     <h2 *ngIf="chat?.senderUsername == this.username; else senderUsername">{{chat?.recipientUsername}}</h2>
                     <ng-template #senderUsername>
-                        <h2>{{chat?.recipientUsername}}</h2>
+                        <h2>{{chat?.senderUsername}}</h2>
                     </ng-template>
                     <h3>
                        {{chat?.senderUsername}}: {{ chat?.content }}  
@@ -20,7 +20,7 @@
         </ul>
     </div>
     <div style="width: 80%; float: left" >
-        <app-conversation [username]="this.chattingWithUsername"></app-conversation>
+        <app-conversation [username]="username" [chattingWithUsername]="chattingWithUsername"></app-conversation>
     </div>
 </div>
 

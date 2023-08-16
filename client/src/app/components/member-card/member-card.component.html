@@ -8,6 +8,6 @@
     <div class="card-right">
         <button (click)="addFollow(member)">Follow</button>
         <button (click)="deleteFollow(member)">Unfollow</button>
-        <button >Send message</button>
+        <button routerLink="/messages" [queryParams]="{user: this.member.userName}">Send message</button>
     </div>
 </div>
