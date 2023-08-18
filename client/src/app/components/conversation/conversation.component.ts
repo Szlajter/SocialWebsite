@@ -38,4 +38,10 @@ export class ConversationComponent {
       }
     })
   }
+
+  deleteMessage(id: number) {
+    this.messageService.DeleteMessage(id).subscribe({
+      next: () => this.messages.splice(this.messages.findIndex(m => m.id === id), 1)
+    })
+  }
 }

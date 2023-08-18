@@ -13,7 +13,10 @@
                             <span class="text-success" *ngIf="message.dateRead && message.senderUsername != username">(read {{message.dateRead | intlRelativeTime}})</span>
                         </small>
                     </div>
-                    <p>{{message.content}}</p>
+                    <div class="d-flex ">
+                        <p>{{message.content}} </p>
+                        <button class="btn btn-secondary btn-sm" (click)="deleteMessage(message.id)">Delete Message</button>
+                    </div>
                 </div>
             </div>
         </li>

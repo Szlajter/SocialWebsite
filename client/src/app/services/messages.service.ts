@@ -28,4 +28,8 @@ export class MessagesService {
   sendMessage(username: string, content: string) {
     return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
   }
+
+  DeleteMessage(id: number) {
+    return this.http.delete(this.baseUrl + 'messages/' + id);
+  }
 }

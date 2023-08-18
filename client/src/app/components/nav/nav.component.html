@@ -26,7 +26,7 @@
           <div class="dropdown-menu" *dropdownMenu>
             <a class="dropdown-item" routerLink="/profile-page/{{user.username}}">Profile</a>
             <a class="dropdown-item" routerLink="/edit-profile-page">Edit Profile</a>
-            <a class="dropdown-item" (click)="logout()">Logout</a>
+            <a class="dropdown-item" (click)="logout()" routerLink="/home-page">Logout</a>
           </div>
         </div>
 

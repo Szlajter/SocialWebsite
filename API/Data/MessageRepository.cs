@@ -37,9 +37,11 @@ namespace API.Data
                 .Include(u => u.Recipient).ThenInclude(p => p.Photos)
                 .Where(
                     m => m.RecipientUsername == currentUserName &&
-                    m.SenderUsername == recipientUsername ||
+                    m.SenderUsername == recipientUsername &&
+                    m.RecipientDeleted == false ||
                     m.RecipientUsername == recipientUsername &&
-                    m.SenderUsername == currentUserName
+                    m.SenderUsername == currentUserName &&
+                    m.SenderDeleted == false
                 )
                 .OrderBy(m => m.MessageSent)
                 .ToListAsync();
@@ -86,7 +88,8 @@ namespace API.Data
             var messages = await _context.Messages
             .Include(u => u.Sender).ThenInclude(p => p.Photos)
             .Include(u => u.Recipient).ThenInclude(p => p.Photos)
-            .Where(m => m.RecipientUsername == username || m.SenderUsername == username)
+            .Where(m => m.RecipientUsername == username && m.RecipientDeleted == false || 
+                        m.SenderUsername == username && m.SenderDeleted == false)
             .GroupBy(m => m.RecipientUsername == username ? m.SenderUsername : m.RecipientUsername)
             .Select(g => g.OrderByDescending(m => m.MessageSent).First())   
             .ToListAsync();
