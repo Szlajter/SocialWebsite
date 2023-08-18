@@ -17,13 +17,15 @@ export class MessagesService {
     return getPaginatedResult<Message[]>(this.baseUrl + 'messages', params, this.http);
   }
 
-  getConversation(username: string)
-  {
+  getConversation(username: string) {
     return this.http.get<Message[]>(this.baseUrl + 'messages/conversation/' + username);
   }
 
-  getChatList()
-  {
+  getChatList() {
     return this.http.get<Message[]>(this.baseUrl + 'messages/conversations'); 
+  }
+
+  sendMessage(username: string, content: string) {
+    return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
   }
 }

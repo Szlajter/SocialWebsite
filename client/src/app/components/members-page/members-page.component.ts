@@ -12,7 +12,6 @@ import { MembersService } from 'src/app/services/members.service';
   styleUrls: ['./members-page.component.css']
 })
 export class MembersPageComponent implements OnInit { 
-  //members$: Observable<Member[]> | undefined;
   members: Member[] = [];
   userParams: UserParams | undefined;
   pagination: Pagination | undefined;

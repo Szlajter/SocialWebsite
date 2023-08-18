@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { Message } from 'src/app/models/message';
 import { MessagesService } from 'src/app/services/messages.service';
 
@@ -8,9 +9,11 @@ import { MessagesService } from 'src/app/services/messages.service';
   styleUrls: ['./conversation.component.css']
 })
 export class ConversationComponent {
+  @ViewChild('messageForm') messageForm?: NgForm;
   @Input() username?: string;
   @Input() chattingWithUsername?: string;
   messages: Message[] = []; 
+  messageContent = '';
 
   constructor(private messageService: MessagesService) { }
   
@@ -24,5 +27,15 @@ export class ConversationComponent {
         next: messages => this.messages = messages
       })
     }
+  }
+
+  sendMessage() {
+    if(!this.chattingWithUsername) return;
+    this.messageService.sendMessage(this.chattingWithUsername, this.messageContent).subscribe({
+      next: message => {
+          this.messages.push(message);
+          this.messageForm?.reset();
+      }
+    })
   }
 }

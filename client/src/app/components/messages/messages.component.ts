@@ -15,6 +15,8 @@ export class MessagesComponent implements OnInit{
   chats: Message[] = [];
   username: string | undefined;
   chattingWithUsername: string | undefined;
+
+  //pagination variables
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 5;
@@ -32,7 +34,9 @@ export class MessagesComponent implements OnInit{
       this.pageNumber = event.page;
     }
   }
-
+  //when trying to send a message to a new person, that person is not visible on the left side.
+  //left panel is loaded based on message array. Adding a new message just to load that user seems bad
+  //i should change that message array to some smaller entity
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
       this.chats = response;
@@ -49,6 +53,4 @@ export class MessagesComponent implements OnInit{
   setChattingWithUsername(message: Message) {
       this.chattingWithUsername = (message.senderUsername == this.username) ? message.recipientUsername : message.senderUsername;
   }
-
-
 }

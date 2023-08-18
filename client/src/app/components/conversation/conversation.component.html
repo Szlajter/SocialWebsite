@@ -18,15 +18,20 @@
             </div>
         </li>
     </ul>
+</div>
 
-    <div >
-        <form>
-            <div class="input-group">
-                <input type="text" class="form-control input-sma" placeholder="Send a message">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="submit">Send</button>
-                </div>
+<div *ngIf="this.chattingWithUsername">
+    <form #messageForm="ngForm" (ngSubmit)="sendMessage()">
+        <div class="input-group">
+            <input type="text"
+                   name="messageContent"
+                   required 
+                   [(ngModel)]="messageContent"
+                   class="form-control input-sma" 
+                   placeholder="Send a message">
+            <div class="input-group-append">
+                <button [disabled]="!messageForm.valid" class="btn btn-primary" type="submit">Send</button>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
