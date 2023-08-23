@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
@@ -20,16 +21,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options => 
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"])),
-        ValidateIssuer = false,
-        ValidateAudience = false
-    };
-});
+builder.Services.AddIdentityServices(builder.Configuration);
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinaryCredentials"));  
@@ -68,7 +61,7 @@ try
     var context = services.GetRequiredService<ApplicationDbContext>();
     //it will rebuild basic db after drop
     await context.Database.MigrateAsync();
-    await Seed.SeedUsers(context);
+   // await Seed.SeedUsers(context);
 }
 catch (Exception ex)
 {
