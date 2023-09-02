@@ -27,12 +27,14 @@ namespace API.Data
             builder.Entity<UserRole>()
                 .HasOne(u => u.User)
                 .WithMany(ur => ur.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
+                .HasForeignKey(ur => ur.UserId)
+                .IsRequired();
 
             builder.Entity<UserRole>()
                 .HasOne(u => u.Role)
                 .WithMany(ur => ur.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
+                .HasForeignKey(ur => ur.RoleId)
+                .IsRequired();
             
             //User-User
             builder.Entity<UserFollow>()

@@ -34,17 +34,24 @@ namespace API.Controllers
 
             var user = _mapper.Map<User>(registerDto);
             user.UserName = registerDto.Username.ToLower();
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
+            var registrationResult = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if(!result.Succeeded)
+            if(!registrationResult.Succeeded)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(registrationResult.Errors);
+            }
+
+            var roleResult = await _userManager.AddToRoleAsync(user, "Member");
+
+            if(!roleResult.Succeeded)
+            {
+                return BadRequest(roleResult.Errors);
             }
 
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user)
+                Token = await _tokenService.CreateToken(user)
             };
         }
 
@@ -70,7 +77,7 @@ namespace API.Controllers
             return new UserDto
             {
                 Username = user.UserName,
-                Token = _tokenService.CreateToken(user),
+                Token = await _tokenService.CreateToken(user),
                 PhotoUrl = user.Photos.FirstOrDefault(x => x.IsProfilePicture)?.Url,
                 Nickname = user.NickName
             };
