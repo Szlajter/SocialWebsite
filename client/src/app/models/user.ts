@@ -3,4 +3,5 @@ export interface User{
     token: string;
     nickname: string;
     photoUrl: string;
+    roles: string[];
 }

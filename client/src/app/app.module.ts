@@ -26,6 +26,8 @@ import { DatepickerComponent } from './components/forms/datepicker/datepicker.co
 import { INTL_LOCALES } from 'angular-ecmascript-intl';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { HasRoleDirective } from './directives/has-role.directive';
 
 
 
@@ -48,6 +50,8 @@ import { ConversationComponent } from './components/conversation/conversation.co
     DatepickerComponent,
     MessagesComponent,
     ConversationComponent,
+    AdminPanelComponent,
+    HasRoleDirective,
   ],
   imports: [
     BrowserModule,

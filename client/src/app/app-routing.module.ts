@@ -14,6 +14,8 @@ import { authGuard } from './guards/auth.guard';
 import { loggedInGuard } from './guards/logged-in-auth.guard'
 import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { MessagesComponent } from './components/messages/messages.component';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { adminGuard } from './guards/admin.guard';
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
@@ -23,6 +25,7 @@ const routes: Routes = [
     children: [
       {path: 'edit-profile-page', component: EditProfilePageComponent, canDeactivate: [PendingChangesGuard]},
       {path: 'messages', component: MessagesComponent},
+      {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]}
     ]
   },
   {path: '', 
