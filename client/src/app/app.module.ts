@@ -26,8 +26,11 @@ import { DatepickerComponent } from './components/forms/datepicker/datepicker.co
 import { INTL_LOCALES } from 'angular-ecmascript-intl';
 import { MessagesComponent } from './components/messages/messages.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
-import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { AdminPanelComponent } from './components/admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './directives/has-role.directive';
+import { UserManagementComponent } from './components/admin/user-management/user-management.component';
+import { PhotoManagementComponent } from './components/admin/photo-management/photo-management.component';
+import { RolesModalComponent } from './components/modals/roles-modal/roles-modal.component';
 
 
 
@@ -52,6 +55,9 @@ import { HasRoleDirective } from './directives/has-role.directive';
     ConversationComponent,
     AdminPanelComponent,
     HasRoleDirective,
+    UserManagementComponent,
+    PhotoManagementComponent,
+    RolesModalComponent,
   ],
   imports: [
     BrowserModule,
