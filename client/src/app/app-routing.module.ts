@@ -11,6 +11,7 @@ import { MembersPageComponent } from './components/members-page/members-page.com
 import { ProfilePageComponent } from './components/profile-page/profile-page.component';
 import { EditProfilePageComponent } from './components/edit-profile-page/edit-profile-page.component';
 import { authGuard } from './guards/auth.guard';
+import { loggedInGuard } from './guards/logged-in-auth.guard'
 import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { MessagesComponent } from './components/messages/messages.component';
 
@@ -21,12 +22,18 @@ const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {path: 'edit-profile-page', component: EditProfilePageComponent, canDeactivate: [PendingChangesGuard]},
+      {path: 'messages', component: MessagesComponent},
     ]
   },
-  {path: 'login-page', component: LoginPageComponent},
-  {path: 'register-page', component: RegisterPageComponent},
+  {path: '', 
+    runGuardsAndResolvers: 'always',
+    canActivate: [loggedInGuard],
+    children: [
+      {path: 'login-page', component: LoginPageComponent},
+      {path: 'register-page', component: RegisterPageComponent},
+    ]
+  },
   {path: 'members-page', component: MembersPageComponent},
-  {path: 'messages', component: MessagesComponent},
   {path: 'profile-page/:username', component: ProfilePageComponent},
   {path: 'test-page', component: TestPageComponent},
   {path: 'not-found-page', component: NotFoundPageComponent},
