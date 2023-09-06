@@ -4,6 +4,7 @@ import { Pagination } from 'src/app/models/pagination';
 import { MessagesService } from 'src/app/services/messages.service';
 import { ConversationComponent } from '../conversation/conversation.component';
 import { ActivatedRoute } from '@angular/router';
+import { StatusService } from 'src/app/services/status.service';
 
 @Component({
   selector: 'app-messages',
@@ -21,7 +22,8 @@ export class MessagesComponent implements OnInit{
   pageNumber = 1;
   pageSize = 5;
 
-  constructor(private messageService: MessagesService, private route: ActivatedRoute) {    
+  constructor(private messageService: MessagesService, private route: ActivatedRoute,
+      public statusService: StatusService) {    
   }
 
   ngOnInit(): void {

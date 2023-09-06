@@ -1,7 +1,10 @@
 <div class="card" *ngIf="member">
     <a routerLink="/profile-page/{{member.userName}}">
         <div class="card-left">
-            <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickName}}" class="rounded-circle">
+            <img src="{{member.photoUrl || './assets/user.png'}}" 
+            alt="{{member.nickName}}" 
+            class="rounded-circle"
+            [class.is-online]="(statusService.onlineUsers$ | async)?.includes(member.userName)">
             <span>{{member.nickName}}</span>
         </div>
     </a>

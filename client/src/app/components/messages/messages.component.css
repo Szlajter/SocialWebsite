@@ -45,3 +45,7 @@ li div{
 	color:#7e818a;
 	font-weight:normal;
 }
+
+.is-online {
+	border: 3px solid green;
+}

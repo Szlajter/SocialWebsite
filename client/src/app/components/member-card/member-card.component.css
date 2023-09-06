@@ -26,6 +26,10 @@
     margin-right: 25px
 }
 
+.is-online {
+    border: 3px solid green;
+}
+
 
 
 
