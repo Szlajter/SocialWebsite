@@ -14,7 +14,7 @@ import { StatusService } from 'src/app/services/status.service';
 export class MessagesComponent implements OnInit{
   @ViewChild(ConversationComponent) currentConversation: ConversationComponent | undefined;
   chats: Message[] = [];
-  username: string | undefined;
+  username: string | undefined; 
   chattingWithUsername: string | undefined;
 
   //pagination variables
@@ -37,8 +37,6 @@ export class MessagesComponent implements OnInit{
     }
   }
   //when trying to send a message to a new person, that person is not visible on the left side.
-  //left panel is loaded based on message array. Adding a new message just to load that user seems bad
-  //i should change that message array to some smaller entity
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
       this.chats = response;

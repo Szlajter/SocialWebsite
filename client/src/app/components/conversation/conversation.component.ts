@@ -1,6 +1,9 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { take } from 'rxjs';
 import { Message } from 'src/app/models/message';
+import { User } from 'src/app/models/user';
+import { AccountService } from 'src/app/services/account.service';
 import { MessagesService } from 'src/app/services/messages.service';
 
 @Component({
@@ -10,22 +13,31 @@ import { MessagesService } from 'src/app/services/messages.service';
 })
 export class ConversationComponent {
   @ViewChild('messageForm') messageForm?: NgForm;
-  @Input() username?: string;
   @Input() chattingWithUsername?: string;
-  messages: Message[] = []; 
+  user?: User;
   messageContent = '';
 
-  constructor(private messageService: MessagesService) { }
-  
+  constructor(public messageService: MessagesService, private accountService: AccountService) { 
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user) this.user = user;
+      }
+    })
+  }
+
   ngOnChanges(): void {
     this.loadMessages();
   }
 
+  ngOnDestroy(): void {
+      this.messageService.stopHubConnection();
+  }
+
   loadMessages() {  
-    if (this.chattingWithUsername) {
-      this.messageService.getConversation(this.chattingWithUsername).subscribe({
-        next: messages => this.messages = messages
-      })
+      this.messageService.stopHubConnection();
+
+    if (this.chattingWithUsername && this.user) {
+      this.messageService.createHubConnection(this.user, this.chattingWithUsername)
     }
   }
 
@@ -33,15 +45,15 @@ export class ConversationComponent {
     if(!this.chattingWithUsername) return;
     this.messageService.sendMessage(this.chattingWithUsername, this.messageContent).subscribe({
       next: message => {
-          this.messages.push(message);
-          this.messageForm?.reset();
+          //this.messages.push(message);
+          //this.messageForm?.reset();
       }
     })
   }
 
   deleteMessage(id: number) {
     this.messageService.DeleteMessage(id).subscribe({
-      next: () => this.messages.splice(this.messages.findIndex(m => m.id === id), 1)
+     // next: () => this.messages.splice(this.messages.findIndex(m => m.id === id), 1)
     })
   }
 }

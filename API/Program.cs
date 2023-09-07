@@ -62,6 +62,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<StatusHub>("hubs/status");
+app.MapHub<MessageHub>("hubs/message");
         
 //seeding data to db
 using var scope = app.Services.CreateScope();
