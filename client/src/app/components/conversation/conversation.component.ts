@@ -43,17 +43,12 @@ export class ConversationComponent {
 
   sendMessage() {
     if(!this.chattingWithUsername) return;
-    this.messageService.sendMessage(this.chattingWithUsername, this.messageContent).subscribe({
-      next: message => {
-          //this.messages.push(message);
-          //this.messageForm?.reset();
-      }
+    this.messageService.sendMessage(this.chattingWithUsername, this.messageContent).then(() => {
+      this.messageForm?.reset();
     })
   }
 
   deleteMessage(id: number) {
-    this.messageService.DeleteMessage(id).subscribe({
-     // next: () => this.messages.splice(this.messages.findIndex(m => m.id === id), 1)
-    })
+    this.messageService.DeleteMessage(id);
   }
 }

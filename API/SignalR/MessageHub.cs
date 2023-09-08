@@ -32,7 +32,7 @@ namespace API.SignalR
 
             var messages = await _messageRepository.GetConversation(Context.User.GetUsername(), otherUser);
 
-            await Clients.Group(groupName).SendAsync("ReceiveConversation", messages);
+            await Clients.Caller.SendAsync("ReceiveConversation", messages);
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
@@ -74,6 +74,36 @@ namespace API.SignalR
             {
                 var groupName = GetGroupName(sender.UserName, recipient.UserName);
                 await Clients.Group(groupName).SendAsync("NewMessage", _mapper.Map<MessageDto>(message));
+            }
+        }
+
+        public async Task DeleteMessage(int id)
+        {
+            var username = Context.User.GetUsername();
+
+            var message = await _messageRepository.GetMessage(id);
+
+            if(message == null)
+            {
+                throw new HubException("Message Not Found");
+            }
+            
+            if(message.SenderUsername != username && message.RecipientUsername != username)
+            {
+                throw new HubException("Unauthorized");
+            }
+            
+            if(message.SenderUsername == username) message.SenderDeleted = true;
+            if(message.RecipientUsername == username) message.RecipientDeleted = true;
+
+            if(message.SenderDeleted && message.RecipientDeleted)
+            {
+                _messageRepository.DeleteMessage(message);
+            }
+
+            if(await _messageRepository.SaveAllAsync())
+            {
+                await Clients.Caller.SendAsync("MessageDeleted",  _mapper.Map<MessageDto>(message));
             }
         }
 

@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
 import { Message } from '../models/message';
-import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
+import { HubConnection, HubConnectionBuilder } from '../../../node_modules/@microsoft/signalr';
 import { User } from '../models/user';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +32,29 @@ export class MessagesService {
      this.hubConnection.on('ReceiveConversation', messages => {
       this.conversationSource.next(messages);
      })
-  }
+
+     this.hubConnection.on('NewMessage', message => {
+      this.conversation$.pipe(take(1)).subscribe({
+        next: messages => {
+          this.conversationSource.next([...messages, message])
+        }
+      })
+     })
+
+     this.hubConnection.on('MessageDeleted', message => {
+      this.conversation$.pipe(take(1)).subscribe({
+        next: messages => {
+          const indexToDelete = messages.findIndex(msg => msg.id === message.id);
+          
+          if (indexToDelete !== -1) {
+            messages.splice(indexToDelete, 1);
+            this.conversationSource.next([...messages]);
+          }
+        }
+     })
+  })
+}
+
 
   stopHubConnection() {
     if(this.hubConnection) {
@@ -53,11 +75,13 @@ export class MessagesService {
     return this.http.get<Message[]>(this.baseUrl + 'messages/conversations'); 
   }
 
-  sendMessage(username: string, content: string) {
-    return this.http.post<Message>(this.baseUrl + 'messages', {recipientUsername: username, content});
+  async sendMessage(username: string, content: string) {
+    return this.hubConnection?.invoke('SendMessage', {recipientUsername: username, content})
+      .catch(error => console.log(error));
   }
 
   DeleteMessage(id: number) {
-    return this.http.delete(this.baseUrl + 'messages/' + id);
+    return this.hubConnection?.invoke('DeleteMessage', id)
+      .catch(error => console.log(error));
   }
 }
