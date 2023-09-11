@@ -23,8 +23,7 @@ import { LoadingInterceptor } from './interceptors/loading.interceptor';
 import { AvatarUploaderComponent } from './components/avatar-uploader/avatar-uploader.component';
 import { TextInputComponent } from './components/forms/text-input/text-input.component';
 import { DatepickerComponent } from './components/forms/datepicker/datepicker.component';
-import { INTL_LOCALES } from 'angular-ecmascript-intl';
-import { MessagesComponent } from './components/messages/messages.component';
+  import { MessagesComponent } from './components/messages/messages.component';
 import { ConversationComponent } from './components/conversation/conversation.component';
 import { AdminPanelComponent } from './components/admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './directives/has-role.directive';
@@ -72,8 +71,6 @@ import { RolesModalComponent } from './components/modals/roles-modal/roles-modal
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
-    //sets timeago pipe language
-    {provide: INTL_LOCALES, useValue: "en-US",}
   ],
   bootstrap: [AppComponent]
 })

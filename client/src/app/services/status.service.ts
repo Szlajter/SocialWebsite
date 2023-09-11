@@ -3,7 +3,8 @@ import { HubConnection, HubConnectionBuilder } from '../../../node_modules/@micr
 import { ToastrService } from 'ngx-toastr';
 import { environment } from 'src/environments/environment.development';
 import { User } from '../models/user';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, take } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class StatusService {
   private onlineUsersSource = new BehaviorSubject<string[]>([]);
   onlineUsers$ = this.onlineUsersSource.asObservable(); 
 
-  constructor(private toastr: ToastrService) { }
+  constructor(private toastr: ToastrService, private router: Router) { }
 
   createHubConnection(user: User) {
     this.hubConnection = new HubConnectionBuilder()
@@ -27,15 +28,28 @@ export class StatusService {
     this.hubConnection.start().catch(error => console.log(error));
 
     this.hubConnection.on('UserIsOnline', username => {
-      this.toastr.info(username + ' has connected')
+      this.onlineUsers$.pipe(take(1)).subscribe({
+        next: usernames => this.onlineUsersSource.next([...usernames, username])
+      })
     })
 
     this.hubConnection.on('UserIsOffline', username => {
-      this.toastr.info(username + ' has disconnected')
+      this.onlineUsers$.pipe(take(1)).subscribe({
+        next: usernames => this.onlineUsersSource.next(usernames.filter(x => x !== username))
+      })
     })
 
-    this.hubConnection.on("GetOnlineUsers", usernames => {
+    this.hubConnection.on('GetOnlineUsers', usernames => {
       this.onlineUsersSource.next(usernames);
+    })
+
+    this.hubConnection.on('NewMessageReceived', ({username, nickname}) => {
+      this.toastr.info(nickname + ' has sent you a message')
+        .onTap
+        .pipe(take(1))
+        .subscribe({
+          next: () => this.router.navigateByUrl(`/messages?user=${username}`)
+        })
     })
   }
 

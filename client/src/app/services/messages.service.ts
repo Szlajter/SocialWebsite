@@ -6,6 +6,7 @@ import { Message } from '../models/message';
 import { HubConnection, HubConnectionBuilder } from '../../../node_modules/@microsoft/signalr';
 import { User } from '../models/user';
 import { BehaviorSubject, take } from 'rxjs';
+import { Group } from '../models/group';
 
 @Injectable({
   providedIn: 'root'
@@ -20,28 +21,28 @@ export class MessagesService {
   constructor(private http: HttpClient) { }
 
   createHubConnection(user: User, otherUsername: string) {
-    this.hubConnection = new HubConnectionBuilder()
-     .withUrl(this.hubUrl + 'message?user=' + otherUsername, {
+  this.hubConnection = new HubConnectionBuilder()
+    .withUrl(this.hubUrl + 'message?user=' + otherUsername, {
       accessTokenFactory: () => user.token
-     })
-     .withAutomaticReconnect()
-     .build();
+    })
+    .withAutomaticReconnect()
+    .build();
 
-     this.hubConnection.start().catch(error => console.log(error));
+    this.hubConnection.start().catch(error => console.log(error));
 
-     this.hubConnection.on('ReceiveConversation', messages => {
+    this.hubConnection.on('ReceiveConversation', messages => {
       this.conversationSource.next(messages);
-     })
+    })
 
-     this.hubConnection.on('NewMessage', message => {
+    this.hubConnection.on('NewMessage', message => {
       this.conversation$.pipe(take(1)).subscribe({
         next: messages => {
           this.conversationSource.next([...messages, message])
         }
       })
-     })
+    })
 
-     this.hubConnection.on('MessageDeleted', message => {
+    this.hubConnection.on('MessageDeleted', message => {
       this.conversation$.pipe(take(1)).subscribe({
         next: messages => {
           const indexToDelete = messages.findIndex(msg => msg.id === message.id);
@@ -51,10 +52,24 @@ export class MessagesService {
             this.conversationSource.next([...messages]);
           }
         }
-     })
-  })
-}
+      })
+    })
 
+    this.hubConnection.on('UpdatedGroup', (group: Group) => {
+      if (group.connections.some(x => x.username === otherUsername)) {
+        this.conversation$.pipe(take(1)).subscribe({
+          next: messages => {
+            messages.forEach(message => {
+              if (!message.dateRead) {
+                message.dateRead = new Date(Date.now());
+              }
+            })
+            this.conversationSource.next([...messages]);
+          }
+        })
+      }
+    })
+}
 
   stopHubConnection() {
     if(this.hubConnection) {

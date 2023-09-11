@@ -7,8 +7,10 @@ namespace API.SignalR
         private static readonly Dictionary<string, List<string>> OnlineUsers = 
             new Dictionary<string,  List<string>>();  
 
-        public void UserConnected(string username, string connectionId)
+        public bool UserConnected(string username, string connectionId)
         {
+            bool newOnline = false;
+
             lock(OnlineUsers)
             {
                 if(OnlineUsers.ContainsKey(username))
@@ -18,23 +20,31 @@ namespace API.SignalR
                 else
                 {
                     OnlineUsers.Add(username, new List<string>() { connectionId });
+                    newOnline = true;
                 }
             }
+
+            return newOnline;
         }
 
-        public void UserDisconnected(string username, string connectionid)
+        public bool UserDisconnected(string username, string connectionid)
         {
+            bool newOffline = false;
+
             lock(OnlineUsers)
             {
-                if(!OnlineUsers.ContainsKey(username)) return;
+                if(!OnlineUsers.ContainsKey(username)) return newOffline;
 
                 OnlineUsers[username].Remove(connectionid);
 
                 if (OnlineUsers[username].Count == 0)
                 {
                     OnlineUsers.Remove(username);
+                    newOffline = true;
                 }
             }
+
+            return newOffline;
         }
 
         public string[] GetOnlineUsers()
@@ -47,6 +57,18 @@ namespace API.SignalR
             }
 
             return onlineUsers;
+        }
+
+        public static List<string> GetUserConnections(string username)
+        {
+            List<string> connectionIds;
+
+            lock(OnlineUsers)
+            {
+                connectionIds = OnlineUsers.GetValueOrDefault(username);
+            }
+
+            return connectionIds;
         }
     }
 }

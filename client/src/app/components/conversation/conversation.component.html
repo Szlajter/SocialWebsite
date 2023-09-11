@@ -9,9 +9,9 @@
                     <div class="chat-body">
                         <div class="header">
                             <small class="text-muted">
-                                <span class="fa fa-clock-o">{{message.messageSent | intlRelativeTime}}</span>
-                                <span class="text-danger" *ngIf="!message.dateRead && message.senderUsername != user.username">(unread)</span>
-                                <span class="text-success" *ngIf="message.dateRead && message.senderUsername != user.username">(read {{message.dateRead | intlRelativeTime}})</span>
+                                <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
+                                <span class="text-danger" *ngIf="!message.dateRead && message.senderUsername == user.username">(unread)</span>
+                                <span class="text-success" *ngIf="message.dateRead && message.senderUsername == user.username">(read {{message.dateRead | timeago}})</span>
                             </small>
                         </div>
                         <div class="d-flex ">

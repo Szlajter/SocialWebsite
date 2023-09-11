@@ -26,7 +26,7 @@ namespace API.Middleware
             using (var dbContext = context.RequestServices.GetRequiredService<ApplicationDbContext>())
             {
                 var user = dbContext.Users.Where(u => u.Id == userId).FirstOrDefault();
-                user.LastActive = DateTime.Now;
+                user.LastActive = DateTime.UtcNow;
                 dbContext.SaveChanges();
             }
             

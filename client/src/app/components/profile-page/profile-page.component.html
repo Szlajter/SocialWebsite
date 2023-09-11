@@ -12,7 +12,7 @@
             <p>{{member.gender}}</p>
             <p>{{member.accountCreationDate | date: 'dd MMM yyyy'}}</p>
             <!-- using angular-ecmascript-intl for now, but i will change it later because it shows weird statuses like "in 1 week" instead of "1 week ago"-->
-            <p>{{member.lastActive | intlRelativeTime}}</p> 
+            <p>{{member.lastActive | timeago}}</p> 
             <button routerLink="/messages" [queryParams]="{user: this.member.userName}">Send message</button>
         </tab>
 
