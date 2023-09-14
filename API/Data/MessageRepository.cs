@@ -53,8 +53,6 @@ namespace API.Data
             {
                 foreach (var message in unreadMessages)
                     message.DateRead = DateTime.UtcNow;
-
-                await _context.SaveChangesAsync();
             }
 
             return _mapper.Map<IEnumerable<MessageDto>>(messages);
@@ -74,11 +72,6 @@ namespace API.Data
             var messages = query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider);
 
             return await PaginatedList<MessageDto>.CreateAsync(messages, messageParams.PageIndex, messageParams.PageSize);
-        }
-
-        public async Task<bool> SaveAllAsync()
-        {
-            return await _context.SaveChangesAsync() > 0;
         }
 
         //returns a list of the latest message in each conversation

@@ -11,26 +11,24 @@ namespace API.Controllers
     [Authorize]
     public class FollowsController : BaseApiController
     {
-        private readonly IFollowRepository _followRepository;
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FollowsController(IFollowRepository followRepository, IUserRepository userRepository)
+        public FollowsController(IUnitOfWork unitOfWork)
         {
-            _followRepository = followRepository;
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost("follow/{username}")]
         public async Task<ActionResult> AddFollower(string username)
         {
             var sourceUserId = User.GetUserId();
-            var userToFollow = await _userRepository.GetUserByUsernameAsync(username);
-            var sourceUser = await _followRepository.GetUserWithFollows(sourceUserId);
+            var userToFollow = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var sourceUser = await _unitOfWork.FollowRepository.GetUserWithFollows(sourceUserId);
 
             if(userToFollow == null) return NotFound();
             if(sourceUser.UserName == username) return BadRequest("Impossible to follow own profile");            
 
-            var userFollow = await _followRepository.GetFollow(sourceUserId, userToFollow.Id);
+            var userFollow = await _unitOfWork.FollowRepository.GetFollow(sourceUserId, userToFollow.Id);
             if(userFollow != null) return BadRequest("User is already followed");
 
             userFollow = new UserFollow
@@ -41,7 +39,7 @@ namespace API.Controllers
 
             sourceUser.Following.Add(userFollow);
 
-            if (await _userRepository.SaveAllAsync())
+            if (await _unitOfWork.Complete())
             {
                 return Ok();
             }
@@ -53,7 +51,7 @@ namespace API.Controllers
         {
             userParams.UserId = User.GetUserId();
 
-            var users = await _followRepository.GetFollowing(userParams);
+            var users = await _unitOfWork.FollowRepository.GetFollowing(userParams);
 
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, 
                 users.PageSize, 
@@ -66,7 +64,7 @@ namespace API.Controllers
         [HttpGet("followers")]
         public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowers([FromQuery]UserParams userParams)
         {
-            var users = await _followRepository.GetFollowers(userParams);
+            var users = await _unitOfWork.FollowRepository.GetFollowers(userParams);
 
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, 
                 users.PageSize, 
@@ -80,18 +78,18 @@ namespace API.Controllers
         public async Task<ActionResult> DeleteFollow(string username)
         {
             var sourceUserId = User.GetUserId();
-            var userToUnfollow = await _userRepository.GetUserByUsernameAsync(username);
-            var sourceUser = await _followRepository.GetUserWithFollows(sourceUserId);
+            var userToUnfollow = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var sourceUser = await _unitOfWork.FollowRepository.GetUserWithFollows(sourceUserId);
 
             if(userToUnfollow == null) return NotFound();
             if(sourceUser.UserName == username) return BadRequest("Impossible to unfollow own profile");            
 
-            var userFollow = await _followRepository.GetFollow(sourceUserId, userToUnfollow.Id);
+            var userFollow = await _unitOfWork.FollowRepository.GetFollow(sourceUserId, userToUnfollow.Id);
             if(userFollow == null) return BadRequest("User is already unfollowed");
 
             sourceUser.Following.Remove(userFollow);
 
-            if (await _userRepository.SaveAllAsync())
+            if (await _unitOfWork.Complete())
             {
                 return Ok();
             }

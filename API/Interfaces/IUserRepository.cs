@@ -12,6 +12,5 @@ namespace API.Interfaces
         Task<User> GetUserByUsernameAsync(string username);
         Task<PaginatedList<MemberDto>> GetMembersAsync(UserParams userParams);
         Task<MemberDto> GetMemberAsync(string username);
-        Task<bool> SaveAllAsync();
     }
 }
