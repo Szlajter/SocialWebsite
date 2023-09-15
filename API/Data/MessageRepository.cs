@@ -32,9 +32,7 @@ namespace API.Data
         //messages between 2 users  
         public async Task<IEnumerable<MessageDto>> GetConversation(string currentUserName, string recipientUsername)
         {
-            var messages = await _context.Messages
-                .Include(u => u.Sender).ThenInclude(p => p.Photos)
-                .Include(u => u.Recipient).ThenInclude(p => p.Photos)
+             var query = _context.Messages
                 .Where(
                     m => m.RecipientUsername == currentUserName &&
                     m.SenderUsername == recipientUsername &&
@@ -44,18 +42,20 @@ namespace API.Data
                     m.SenderDeleted == false
                 )
                 .OrderBy(m => m.MessageSent)
-                .ToListAsync();
+                .AsQueryable();
 
-            var unreadMessages = messages.Where(m => m.DateRead == null 
+            var unreadMessages = query.Where(m => m.DateRead == null 
                 && m.RecipientUsername == currentUserName).ToList();
             
             if (unreadMessages.Any())
             {
                 foreach (var message in unreadMessages)
+                {
                     message.DateRead = DateTime.UtcNow;
+                }
             }
 
-            return _mapper.Map<IEnumerable<MessageDto>>(messages);
+            return await query.ProjectTo<MessageDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<Message> GetMessage(int id)
@@ -79,15 +79,17 @@ namespace API.Data
         public async Task<IEnumerable<MessageDto>> GetRecentConversations(string username)
         {
             var messages = await _context.Messages
-            .Include(u => u.Sender).ThenInclude(p => p.Photos)
-            .Include(u => u.Recipient).ThenInclude(p => p.Photos)
-            .Where(m => m.RecipientUsername == username && m.RecipientDeleted == false || 
+                .Where(m => m.RecipientUsername == username && m.RecipientDeleted == false || 
                         m.SenderUsername == username && m.SenderDeleted == false)
-            .GroupBy(m => m.RecipientUsername == username ? m.SenderUsername : m.RecipientUsername)
-            .Select(g => g.OrderByDescending(m => m.MessageSent).First())   
-            .ToListAsync();
-                          
-            return _mapper.Map<IEnumerable<MessageDto>>(messages);
+                .ProjectTo<MessageDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+
+            var recentMessages = messages    
+                .GroupBy(m => m.RecipientUsername == username ? m.SenderUsername : m.RecipientUsername)
+                .Select(g => g.OrderByDescending(m => m.MessageSent).First())
+                .ToList();
+
+            return recentMessages; 
         }
 
         public void AddGroup(Group group)

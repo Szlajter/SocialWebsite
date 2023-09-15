@@ -18,6 +18,7 @@ namespace API.Controllers
          public MessagesController(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
         [HttpPost]
