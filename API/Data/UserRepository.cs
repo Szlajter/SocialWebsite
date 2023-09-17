@@ -56,7 +56,7 @@ namespace API.Data
                 .Include(p => p.Photos)
                 .ToListAsync();
         }
-
+ 
         public void Update(User user)
         {
             _context.Entry(user).State = EntityState.Modified;

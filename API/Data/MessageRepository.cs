@@ -76,6 +76,7 @@ namespace API.Data
 
         //returns a list of the latest message in each conversation
         //I should refactor it later. Make it so it returns some smaller dto
+        //groupBy and Select must be used by client. Trying to do it async caused a lot of issues
         public async Task<IEnumerable<MessageDto>> GetRecentConversations(string username)
         {
             var messages = await _context.Messages
