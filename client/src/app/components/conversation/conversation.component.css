@@ -1,7 +1,11 @@
 .chat {
-    list-style: none;
     margin: 0;
     padding: 0;
+    padding-right: 5px;
+    height: 83vh;
+    list-style: none;
+    overflow-y: scroll; 
+    overflow-x: hidden; 
 }
 
 .chat li {

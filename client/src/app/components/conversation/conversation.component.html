@@ -1,6 +1,8 @@
 <div *ngIf="user">
     <div *ngIf="(messageService.conversation$ | async)!.length > 0">
-        <ul class="chat">
+        <ul class="chat"
+            #scroll
+            [scrollTop]="scroll.scrollHeight">
             <li *ngFor="let message of (messageService.conversation$ | async)">
                 <div>
                     <span class="chat-img float-begin">
@@ -24,7 +26,7 @@
         </ul>
     </div>
     
-    <div *ngIf="this.chattingWithUsername">
+    <div class="chat-input" *ngIf="this.chattingWithUsername">
         <form #messageForm="ngForm" (ngSubmit)="sendMessage()">
             <div class="input-group">
                 <input type="text"

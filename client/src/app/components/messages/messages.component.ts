@@ -17,7 +17,6 @@ export class MessagesComponent implements OnInit{
   username: string | undefined; 
   chattingWithUsername: string | undefined;
 
-  //pagination variables
   pagination: Pagination | undefined;
   pageNumber = 1;
   pageSize = 5;

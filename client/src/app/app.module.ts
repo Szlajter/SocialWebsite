@@ -28,7 +28,6 @@ import { ConversationComponent } from './components/conversation/conversation.co
 import { AdminPanelComponent } from './components/admin/admin-panel/admin-panel.component';
 import { HasRoleDirective } from './directives/has-role.directive';
 import { UserManagementComponent } from './components/admin/user-management/user-management.component';
-import { PhotoManagementComponent } from './components/admin/photo-management/photo-management.component';
 import { RolesModalComponent } from './components/modals/roles-modal/roles-modal.component';
 import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm-modal.component';
 
@@ -56,7 +55,6 @@ import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm
     AdminPanelComponent,
     HasRoleDirective,
     UserManagementComponent,
-    PhotoManagementComponent,
     RolesModalComponent,
     ConfirmModalComponent,
   ],
