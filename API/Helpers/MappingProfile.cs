@@ -21,6 +21,11 @@ namespace API.Helpers
             CreateMap<Message, MessageDto>()
                 .ForMember(dest => dest.SenderPhotoUrl, opt => opt.MapFrom(src => src.Sender.Photos.FirstOrDefault(x => x.IsProfilePicture).Url))
                 .ForMember(dest => dest.RecipientPhotoUrl, opt => opt.MapFrom(src => src.Recipient.Photos.FirstOrDefault(x => x.IsProfilePicture).Url));
+            CreateMap<Post, PostDto>()
+                .ForMember(dest => dest.AuthorNickName, opt => opt.MapFrom(src => src.Author.NickName))
+                .ForMember(dest => dest.LikedByCount, opt => opt.MapFrom(src => src.LikedBy.Count))
+                .ForMember(dest => dest.DislikedByCount, opt => opt.MapFrom(src => src.DislikedBy.Count))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
             //entity framework refuses to return dates as utc so mapping is required.
             CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
             CreateMap<DateTime?, DateTime?>().ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);

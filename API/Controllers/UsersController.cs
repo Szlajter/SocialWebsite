@@ -63,32 +63,32 @@ namespace API.Controllers
             return BadRequest("User update failed");
         }
 
-        [HttpPost("add-photo")]
-        public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
-        {
-            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+        // [HttpPost("add-photo")]
+        // public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
+        // {
+        //     var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
-            if (user == null) return NotFound();
+        //     if (user == null) return NotFound();
 
-            var result = await _photoService.AddPhotoAsync(file);
+        //     var result = await _photoService.AddPhotoAsync(file);
 
-            if(result.Error != null) return BadRequest(result.Error.Message);
+        //     if(result.Error != null) return BadRequest(result.Error.Message);
 
-            var photo = new Photo
-            {
-                Url = result.SecureUrl.AbsoluteUri,
-                PublicId = result.PublicId
-            };
+        //     var photo = new Photo
+        //     {
+        //         Url = result.SecureUrl.AbsoluteUri,
+        //         PublicId = result.PublicId
+        //     };
 
-            user.Photos.Add(photo);
+        //     user.Photos.Add(photo);
 
-            if (await _unitOfWork.Complete())
-            {
-                return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
-            }
+        //     if (await _unitOfWork.Complete())
+        //     {
+        //         return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
+        //     }
 
-            return BadRequest("Something went wrong while adding a new photo");
-        }
+        //     return BadRequest("Something went wrong while adding a new photo");
+        // }
 
         [HttpPost("add-profile-picture")]
         public async Task<ActionResult<PhotoDto>> AddProfilePicture(IFormFile file)

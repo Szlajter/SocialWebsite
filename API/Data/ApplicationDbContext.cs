@@ -19,8 +19,8 @@ namespace API.Data
         public DbSet<Message> Messages { get; set; }
         public DbSet<Group> Groups{ get; set; }
         public DbSet<Connection> Connections { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
-        //manually creating join tables
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -64,6 +64,23 @@ namespace API.Data
                 .HasOne(u => u.Sender)
                 .WithMany(f => f.MessagesSent)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // User-Post (Author)
+            builder.Entity<Post>()
+                .HasOne(u => u.Author)
+                .WithMany(f => f.Posts)
+                .HasForeignKey(u => u.AuthorId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // User-Post (Likes)
+            builder.Entity<Post>()
+                .HasMany(u => u.LikedBy)
+                .WithMany(f => f.LikedPosts);
+
+            // User-Post (Dislikes)
+            builder.Entity<Post>()
+                .HasMany(u => u.DislikedBy)
+                .WithMany(f => f.DislikedPosts);
         }
     }
 }

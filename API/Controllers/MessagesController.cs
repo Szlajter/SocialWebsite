@@ -49,7 +49,7 @@ namespace API.Controllers
 
             if (await _unitOfWork.Complete()) return Ok(_mapper.Map<MessageDto>(message));
 
-            return BadRequest("Faield to send message");
+            return BadRequest("Failed to send message");
         }
 
         [HttpGet]

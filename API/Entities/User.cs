@@ -13,11 +13,16 @@ namespace API.Entities
         public string City { get; set; }
         public string Country { get; set; }
         public string Description { get; set; }
-        public List<Photo> Photos { get; set; } = new();
-        public List<UserFollow> Followers { get; set; } = new();
-        public List<UserFollow> Following { get; set; } = new();
+        public List<Photo> Photos { get; set; }
+        public ProfilePicture ProfilePicture { get; set; }
+        public List<UserFollow> Followers { get; set; } 
+        public List<UserFollow> Following { get; set; }
         public List<Message> MessagesSent { get; set; }
         public List<Message> MessagesReceived { get; set; }
+        public ICollection<Post> Posts { get; set; } = new List<Post>();
+        public ICollection<Post> LikedPosts { get; set; }
+        public ICollection<Post> DislikedPosts { get; set; }
         public ICollection<UserRole> UserRoles { get; set; }
+        
     }
 }
