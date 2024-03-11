@@ -24,26 +24,35 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<PostDto>> CreatePost(PostCreateDto postCreate)
         {
-            var username = User.GetUsername();
-
-            var author = await _unitOfWork.UserRepository.GetUserByUsernameAsync(username);
+            var author = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (author == null)
                 return NotFound();
 
             var post = new Post
             {
-                Title = postCreate.Title,
                 Content = postCreate.Content,
                 Author = author,
                 AuthorId = author.Id
             };
 
+            // when the post is a comment
+            if (postCreate.ParentPostId !=  null)
+            {
+                var ParentPostId = postCreate.ParentPostId.Value;
+                var ParentPost = await _unitOfWork.PostRepository.GetPost(ParentPostId);
+
+                post.ParentPostId = ParentPostId;
+                post.ParentPost = ParentPost;
+
+                ParentPost.Comments.Add(post);
+            }
+
             _unitOfWork.PostRepository.CreatePost(post);
 
             if (await _unitOfWork.Complete()) return Ok(_mapper.Map<PostDto>(post));
 
-            return BadRequest("Faield to create a post");
+            return BadRequest("Failed to create a post");
         }
 
         // [HttpDelete("{id}")]

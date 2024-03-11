@@ -3,7 +3,6 @@ namespace API.DTOs
     public class PostDto
     {
         public int Id { get; set; }
-        public string Title { get; set; }
         public string Content { get; set; }
         public DateTime DatePosted {get; set; } = DateTime.UtcNow;
         public bool IsEdited { get; set; } = false;
@@ -12,6 +11,7 @@ namespace API.DTOs
         public int AuthorId { get; set; }
         public string AuthorNickName { get; set; }
 
+        public int? ParentPostId { get; set; }
         public ICollection<PostDto> Comments { get; set; } = new List<PostDto>();
 
         public int LikedByCount { get; set; }
