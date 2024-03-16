@@ -1,19 +1,11 @@
-using System.Security.Claims;
-using API.Data;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
-using API.Services;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Query.Internal;
-
 namespace API.Controllers
 {
     [Authorize]
@@ -90,6 +82,7 @@ namespace API.Controllers
         //     return BadRequest("Something went wrong while adding a new photo");
         // }
 
+        // TODO: it should be a put request i think
         [HttpPost("add-profile-picture")]
         public async Task<ActionResult<PhotoDto>> AddProfilePicture(IFormFile file)
         {

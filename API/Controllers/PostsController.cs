@@ -55,6 +55,28 @@ namespace API.Controllers
             return BadRequest("Failed to create a post");
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<PostDto>> GetPost(int id)
+        {
+            var post = await _unitOfWork.PostRepository.GetPost(id);
+
+            if (post == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<PostDto>(post));
+        }
+
+        // TODO: add some checks for content
+        [HttpPatch("{id}")]
+        public async Task<ActionResult> UpdatePost(int id, [FromBody] string content)
+        {
+            await _unitOfWork.PostRepository.UpdatePostContent(id, content);
+            
+            return Ok();
+        }
+
         // [HttpDelete("{id}")]
         // public async Task<ActionResult> DeletePost(int id)
         // {

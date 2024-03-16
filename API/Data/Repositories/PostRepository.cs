@@ -4,6 +4,7 @@ using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Data
 {
@@ -44,5 +45,14 @@ namespace API.Data
 
             return await PaginatedList<PostDto>.CreateAsync(posts, userParams.PageIndex, userParams.PageSize);
         }
+
+        public async Task UpdatePostContent(int id, string content)
+        {
+            await _context.Posts
+                .Where(u => u.Id == id)
+                .ExecuteUpdateAsync(b => b
+                    .SetProperty(u => u.Content, content)
+                    .SetProperty(u => u.IsEdited, true));
+        }
     }
-}
+}   
