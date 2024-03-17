@@ -77,7 +77,7 @@ namespace API.Controllers
             return Ok();
         }
 
-        // [HttpDelete("{id}")]
+        // [HttpDelete("{id}")] 
         // public async Task<ActionResult> DeletePost(int id)
         // {
 

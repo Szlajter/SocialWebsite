@@ -12,6 +12,6 @@ export interface Member {
     city: string
     country: string
     description: string
-    photos: Photo[]
+    // photos: Photo[]    todo: previously user stores photos. now photos are owned by posts.
   }
   

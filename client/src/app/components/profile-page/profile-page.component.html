@@ -16,11 +16,11 @@
             <button routerLink="/messages" [queryParams]="{user: this.member.userName}">Send message</button>
         </tab>
 
-        <tab heading="Photos">
+        <!-- <tab heading="Photos">
             <div *ngFor="let photo of member?.photos">
                 <img src="{{photo.url}}">
             </div>
-        </tab>
+        </tab> -->
         
         <tab heading="Followers" (selectTab)="loadFollowers()">
             <div *ngIf="followers">

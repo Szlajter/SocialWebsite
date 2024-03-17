@@ -1,8 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace API.Entities
 {
-    [Table("ProfilePicture")]
     public class ProfilePicture
     {
         public int  Id { get; set; }

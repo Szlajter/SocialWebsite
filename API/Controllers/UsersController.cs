@@ -82,61 +82,62 @@ namespace API.Controllers
         //     return BadRequest("Something went wrong while adding a new photo");
         // }
 
-        // TODO: it should be a put request i think
-        [HttpPost("add-profile-picture")]
-        public async Task<ActionResult<PhotoDto>> AddProfilePicture(IFormFile file)
+        // TODO: remove the photo from db
+        [HttpPost("update-profile-picture")]
+        public async Task<ActionResult<PhotoDto>> UpdateProfilePicture(IFormFile file)
         {
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();
-
-            var currentProfilePicture = user.Photos.FirstOrDefault(x => x.IsProfilePicture == true);
-
-            if(currentProfilePicture != null)
-            {
-                currentProfilePicture.IsProfilePicture = false;
-            }
 
             var result = await _photoService.AddPhotoAsync(file);
 
             if(result.Error != null) return BadRequest(result.Error.Message);
 
-            var photo = new Photo
+            if (user.ProfilePicture != null)
             {
-                Url = result.SecureUrl.AbsoluteUri,
-                IsProfilePicture = true,
-                PublicId = result.PublicId
-            };
+                user.ProfilePicture.Url = result.SecureUrl.AbsoluteUri;
+                user.ProfilePicture.PublicId = result.PublicId;
+            }
+            else
+            {
+                var newProfilePicture = new ProfilePicture
+                {
+                    Url = result.SecureUrl.AbsoluteUri,
+                    PublicId = result.PublicId,
+                    UserId = user.Id
+                };
+                user.ProfilePicture = newProfilePicture;
+            }
 
-            user.Photos.Add(photo);
 
             if (await _unitOfWork.Complete())
             {
-                return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
+                return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(user.ProfilePicture)); 
             }
 
             return BadRequest("Something went wrong while adding a profile picture");
         }
 
-        [HttpDelete("delete-photo/{photoId}")]
-        public async Task<ActionResult> DeletePicture(int photoId)
+        [HttpDelete("delete-profile-picture")]
+        public async Task<ActionResult> DeletePicture()
         {
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
             if (user == null) return NotFound();
 
-            var photo = user.Photos.FirstOrDefault(x => x.Id == photoId);
+            var photo = user.ProfilePicture;
 
             if(photo == null) return NotFound();
 
             //removing only photos that are in cloudinary
             if(photo.PublicId != null)
             {
-                var result = await _photoService.DeletePhotoAsync(photo.PublicId);
+                var result = await _photoService.DeleteMediaAsync(photo.PublicId);
                 if(result.Error != null) return BadRequest(result.Error.Message);
             }
 
-            user.Photos.Remove(photo);
+            user.ProfilePicture = null;
 
             if (await _unitOfWork.Complete())
             {

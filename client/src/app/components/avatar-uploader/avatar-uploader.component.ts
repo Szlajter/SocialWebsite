@@ -41,7 +41,7 @@ export class AvatarUploaderComponent implements OnInit {
 
   initializeUploader() {
     this.uploader = new FileUploader({
-      url: this.baseUrl + 'users/add-profile-picture',
+      url: this.baseUrl + 'users/update-profile-picture',
       authToken: 'Bearer ' + this.user?.token,
       isHTML5: true,
       allowedFileType: ['image'],
@@ -54,14 +54,8 @@ export class AvatarUploaderComponent implements OnInit {
     this.uploader.onSuccessItem = (item, response, status, headers) => {
       if (response && this.member && this.user) {
         const photo: Photo = JSON.parse(response);
-        //update member
-        this.member.photos.push(photo);
         this.member.photoUrl = photo.url;
-        this.member.photos.forEach(p => {
-          if(p.isProfilePicture) p.isProfilePicture = false;
-          if(p.id == photo.id) p.isProfilePicture = true;
-        })
-        //update user
+        
         this.user.photoUrl = photo.url;
         this.accountService.setCurrentUser(this.user);
         this.busyService.idle();

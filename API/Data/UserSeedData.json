@@ -9,11 +9,11 @@
         "Description": "Sit sit incididunt proident velit.",
         "City": "Greenbush",
         "Country": "Martinique",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/women/56.jpg"
             }
-        ]
+
     },
     {
         "UserName": "Karen",
@@ -25,11 +25,10 @@
         "Description": "Dolor aliquip velit amet aliqua minim labore sit laboris non aliquip cillum.",
         "City": "Celeryville",
         "Country": "Grenada",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/women/50.jpg"
             }
-        ]
     },
     {
         "UserName": "Margo",
@@ -41,11 +40,10 @@
         "Description": "Commodo do eiusmod quis labore est non.",
         "City": "Rosewood",
         "Country": "Svalbard and Jan Mayen Islands",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/women/14.jpg"
             }
-        ]
     },
     {
         "UserName": "Lois",
@@ -57,11 +55,10 @@
         "Description": "Duis in est laboris anim pariatur incididunt mollit laboris ea velit aliquip cillum.",
         "City": "Orviston",
         "Country": "Zimbabwe",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/women/11.jpg"
             }
-        ]
     },
     {
         "UserName": "Ruthie",
@@ -73,11 +70,10 @@
         "Description": "Elit Lorem aliquip deserunt cupidatat ex aliquip ullamco.",
         "City": "Germanton",
         "Country": "Antigua and Barbuda",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/women/84.jpg"
             }
-        ]
     },
     {
         "UserName": "Todd",
@@ -89,11 +85,10 @@
         "Description": "Esse cillum deserunt fugiat deserunt irure ea esse deserunt quis exercitation velit do nisi reprehenderit.",
         "City": "Cliff",
         "Country": "British Indian Ocean Territory",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/men/90.jpg"
             }
-        ]
     },
     {
         "UserName": "Porter",
@@ -105,11 +100,9 @@
         "Description": "Aliquip proident pariatur excepteur incididunt irure et.",
         "City": "Welda",
         "Country": "Christmas Island",
-        "Photos": [
-            {
+        "ProfilePicture": {
                 "Url": "https://randomuser.me/api/portraits/men/87.jpg"
             }
-        ]
     },
     {
         "UserName": "Mayo",
@@ -121,11 +114,10 @@
         "Description": "Duis consectetur proident labore velit minim irure proident incididunt officia duis.",
         "City": "Clarence",
         "Country": "Burkina Faso",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/men/57.jpg"
             }
-        ]
     },
     {
         "UserName": "Skinner",
@@ -137,11 +129,10 @@
         "Description": "Pariatur qui ut commodo laboris officia.",
         "City": "Herald",
         "Country": "Poland",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/men/11.jpg"
             }
-        ]
     },
     {
         "UserName": "Davis",
@@ -153,10 +144,9 @@
         "Description": "Labore consectetur labore ut nulla voluptate nulla quis labore tempor dolor laborum.",
         "City": "Lupton",
         "Country": "Luxembourg",
-        "Photos": [
+        "ProfilePicture": 
             {
                 "Url": "https://randomuser.me/api/portraits/men/93.jpg"
             }
-        ]
     }
 ]

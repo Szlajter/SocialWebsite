@@ -12,15 +12,16 @@ namespace API.Helpers
         {
             CreateMap<User, MemberDto>()
                 .ForMember(dest => dest.PhotoUrl, 
-                           opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsProfilePicture).Url))
+                           opt => opt.MapFrom(src => src.ProfilePicture.Url))
                 .ForMember(dest => dest.Age,
                            opt => opt.MapFrom(src => src.Birthdate.CalculateAge()));
             CreateMap<Photo, PhotoDto>();
+            CreateMap<ProfilePicture, PhotoDto>();
             CreateMap<MemberUpdateDto, User>();
             CreateMap<RegisterDto, User>();
             CreateMap<Message, MessageDto>()
-                .ForMember(dest => dest.SenderPhotoUrl, opt => opt.MapFrom(src => src.Sender.Photos.FirstOrDefault(x => x.IsProfilePicture).Url))
-                .ForMember(dest => dest.RecipientPhotoUrl, opt => opt.MapFrom(src => src.Recipient.Photos.FirstOrDefault(x => x.IsProfilePicture).Url));
+                .ForMember(dest => dest.SenderPhotoUrl, opt => opt.MapFrom(src => src.Sender.ProfilePicture.Url))
+                .ForMember(dest => dest.RecipientPhotoUrl, opt => opt.MapFrom(src => src.Recipient.ProfilePicture.Url));
             CreateMap<Post, PostDto>()
                 .ForMember(dest => dest.AuthorNickName, opt => opt.MapFrom(src => src.Author.NickName))
                 .ForMember(dest => dest.LikedByCount, opt => opt.MapFrom(src => src.LikedBy.Count))

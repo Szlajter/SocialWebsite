@@ -75,12 +75,14 @@ namespace API.Data
             // User-Post (Likes)
             builder.Entity<Post>()
                 .HasMany(u => u.LikedBy)
-                .WithMany(f => f.LikedPosts);
+                .WithMany(f => f.LikedPosts)
+                .UsingEntity(join => join.ToTable("PostUserLike"));
 
             // User-Post (Dislikes)
             builder.Entity<Post>()
                 .HasMany(u => u.DislikedBy)
-                .WithMany(f => f.DislikedPosts);
+                .WithMany(f => f.DislikedPosts)
+                .UsingEntity(join => join.ToTable("PostUserDislike"));
         }
     }
 }

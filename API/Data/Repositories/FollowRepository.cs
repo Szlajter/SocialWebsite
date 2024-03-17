@@ -34,7 +34,7 @@ namespace API.Data
                 Id = user.Id,
                 UserName = user.UserName,
                 NickName = user.NickName,
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsProfilePicture).Url
+                PhotoUrl = user.ProfilePicture.Url
             });
 
             return await PaginatedList<FollowDto>.CreateAsync(followingUsers, userParams.PageIndex, userParams.PageSize);
@@ -54,7 +54,7 @@ namespace API.Data
                 Id = user.Id,
                 UserName = user.UserName,
                 NickName = user.NickName,
-                PhotoUrl = user.Photos.FirstOrDefault(x => x.IsProfilePicture).Url
+                PhotoUrl = user.ProfilePicture.Url
             });
 
             return await PaginatedList<FollowDto>.CreateAsync(followedUsers, userParams.PageIndex, userParams.PageSize);

@@ -12,7 +12,9 @@
         <button type="submit" [disabled]="!editForm.dirty" class="btn btn-success col-12 mt-5" >Update Profile</button>
 </form>   
 
-<div *ngIf="member" class="photoGallery">
+
+<!-- TODO: photos were in relationship with users before. Now they have a relation with posts -->
+<!-- <div *ngIf="member" class="photoGallery">
     <div *ngFor="let photo of member.photos">
         <div class="container" (click)="removePhoto.click()">
             <img src="{{photo.url}}" alt="user's photo" class="img-thumbnail mb-1 w-15">
@@ -22,4 +24,4 @@
             </span>
         </div>
     </div>
-</div>
+</div> -->
