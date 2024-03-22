@@ -30,6 +30,7 @@ import { HasRoleDirective } from './directives/has-role.directive';
 import { UserManagementComponent } from './components/admin/user-management/user-management.component';
 import { RolesModalComponent } from './components/modals/roles-modal/roles-modal.component';
 import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm-modal.component';
+import { CreatePostComponent } from './components/create-post/create-post.component';
 
 
 
@@ -57,6 +58,7 @@ import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm
     UserManagementComponent,
     RolesModalComponent,
     ConfirmModalComponent,
+    CreatePostComponent,
   ],
   imports: [
     BrowserModule,

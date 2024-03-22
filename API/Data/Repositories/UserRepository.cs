@@ -42,7 +42,7 @@ namespace API.Data
         {
             return await _context.Users.FindAsync(id);
         }
-
+        // Rethink including profile picture table
         public async Task<User> GetUserByUsernameAsync(string username)
         {
             return await _context.Users
@@ -60,6 +60,25 @@ namespace API.Data
         public void Update(User user)
         {
             _context.Entry(user).State = EntityState.Modified;
+        }
+
+        public void UpdateProfilePicture(User user, string url, string publicId)
+        {
+            if (user.ProfilePicture != null)
+            {
+                user.ProfilePicture.Url = url;
+                user.ProfilePicture.PublicId = publicId;
+            }
+            else
+            {
+                var newProfilePicture = new ProfilePicture
+                {
+                    Url = url,
+                    PublicId = publicId,
+                    UserId = user.Id
+                };
+                user.ProfilePicture = newProfilePicture;
+            }
         }
     }
 }

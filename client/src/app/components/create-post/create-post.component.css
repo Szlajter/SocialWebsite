@@ -1,0 +1,15 @@
+.card {
+  width: 100vh;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+  }
+
+.card-img {
+  height: 5vh;
+  width: 5vh;
+  margin-right: 1vh;
+}
+  

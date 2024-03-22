@@ -1,13 +1,14 @@
 using API.DTOs;
-using API.Entities;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 namespace API.Controllers
 {
+    // Currently im getting the user using claims. Passing id by query might be a better idea but i'm not sure yet.
     [Authorize]
     public class UsersController: BaseApiController
     { 
@@ -55,34 +56,6 @@ namespace API.Controllers
             return BadRequest("User update failed");
         }
 
-        // [HttpPost("add-photo")]
-        // public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
-        // {
-        //     var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-
-        //     if (user == null) return NotFound();
-
-        //     var result = await _photoService.AddPhotoAsync(file);
-
-        //     if(result.Error != null) return BadRequest(result.Error.Message);
-
-        //     var photo = new Photo
-        //     {
-        //         Url = result.SecureUrl.AbsoluteUri,
-        //         PublicId = result.PublicId
-        //     };
-
-        //     user.Photos.Add(photo);
-
-        //     if (await _unitOfWork.Complete())
-        //     {
-        //         return CreatedAtAction("GetUser", new {username = user.UserName}, _mapper.Map<PhotoDto>(photo)); 
-        //     }
-
-        //     return BadRequest("Something went wrong while adding a new photo");
-        // }
-
-        // TODO: remove the photo from db
         [HttpPost("update-profile-picture")]
         public async Task<ActionResult<PhotoDto>> UpdateProfilePicture(IFormFile file)
         {
@@ -94,22 +67,7 @@ namespace API.Controllers
 
             if(result.Error != null) return BadRequest(result.Error.Message);
 
-            if (user.ProfilePicture != null)
-            {
-                user.ProfilePicture.Url = result.SecureUrl.AbsoluteUri;
-                user.ProfilePicture.PublicId = result.PublicId;
-            }
-            else
-            {
-                var newProfilePicture = new ProfilePicture
-                {
-                    Url = result.SecureUrl.AbsoluteUri,
-                    PublicId = result.PublicId,
-                    UserId = user.Id
-                };
-                user.ProfilePicture = newProfilePicture;
-            }
-
+            _unitOfWork.UserRepository.UpdateProfilePicture(user, result.SecureUrl.AbsoluteUri, result.PublicId);
 
             if (await _unitOfWork.Complete())
             {
@@ -123,7 +81,6 @@ namespace API.Controllers
         public async Task<ActionResult> DeletePicture()
         {
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
-
             if (user == null) return NotFound();
 
             var photo = user.ProfilePicture;
