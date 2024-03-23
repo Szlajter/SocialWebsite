@@ -31,6 +31,7 @@ import { UserManagementComponent } from './components/admin/user-management/user
 import { RolesModalComponent } from './components/modals/roles-modal/roles-modal.component';
 import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm-modal.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
+import { PostCardComponent } from './components/post-card/post-card.component';
 
 
 
@@ -59,6 +60,7 @@ import { CreatePostComponent } from './components/create-post/create-post.compon
     RolesModalComponent,
     ConfirmModalComponent,
     CreatePostComponent,
+    PostCardComponent,
   ],
   imports: [
     BrowserModule,
