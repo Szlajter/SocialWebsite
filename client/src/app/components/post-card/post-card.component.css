@@ -1,0 +1,31 @@
+.card {
+    margin-top: 5vh;
+}
+  
+.card-header {
+    display: flex;
+    align-items: center;
+}
+  
+.card-img {
+    height: 5vh;
+    width: 5vh;
+    margin-right: 1vh;
+}
+  
+.card-footer {
+    display: flex;
+    align-items: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+  
+.card-footer i {
+    margin-right: 10px;
+}
+
+.fa {
+    font-size: 2vh;
+    padding-right: 1vh;
+}
+  
