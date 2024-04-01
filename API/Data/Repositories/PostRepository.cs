@@ -34,7 +34,7 @@ namespace API.Data
             return await _context.Posts.FindAsync(id);
         }
 
-        public async Task<PaginatedList<PostDto>> GetPosts(UserParams userParams)
+        public async Task<PaginatedList<PostDto>> GetPosts(PaginationParams paginationParams)
         {
             var query = _context.Posts
                 .OrderByDescending(x => x.DatePosted)
@@ -43,7 +43,7 @@ namespace API.Data
             // remember to change mapping profile
             var posts = query.ProjectTo<PostDto>(_mapper.ConfigurationProvider);
 
-            return await PaginatedList<PostDto>.CreateAsync(posts, userParams.PageIndex, userParams.PageSize);
+            return await PaginatedList<PostDto>.CreateAsync(posts, paginationParams.PageIndex, paginationParams.PageSize);
         }
 
         public async Task UpdatePostContent(int id, string content)

@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +23,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<PostDto>> CreatePost(PostCreateDto postCreate)
+        public async Task<ActionResult> CreatePost(PostCreateDto postCreate)
         {
             var author = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
@@ -50,7 +51,7 @@ namespace API.Controllers
 
             _unitOfWork.PostRepository.CreatePost(post);
 
-            if (await _unitOfWork.Complete()) return Ok(_mapper.Map<PostDto>(post));
+            if (await _unitOfWork.Complete()) return Ok();
 
             return BadRequest("Failed to create a post");
         }
@@ -66,6 +67,16 @@ namespace API.Controllers
             }
 
             return Ok(_mapper.Map<PostDto>(post));
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<PaginatedList<PostDto>>> GetPosts([FromQuery]PaginationParams paginationParams)
+        {
+            var posts = await _unitOfWork.PostRepository.GetPosts(paginationParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(posts.PageIndex, posts.PageSize, posts.TotalCount, posts.TotalPages));
+
+            return Ok(posts);
         }
 
         // TODO: add some checks for content

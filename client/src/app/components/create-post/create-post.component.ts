@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
@@ -11,7 +12,7 @@ export class CreatePostComponent implements OnInit {
   profilePictureUrl: string | undefined;
   model: any = { };
   
-  constructor(public postsService: PostsService) {}
+  constructor(public postsService: PostsService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.username = JSON.parse(localStorage.getItem('user')!).username;
@@ -19,6 +20,8 @@ export class CreatePostComponent implements OnInit {
   }
 
   createPost() {
-    this.postsService.createPost(this.model);
+    this.postsService.createPost(this.model).subscribe({
+      next: () => this.toastr.success("Succesfully created a new post!")
+    });
   }
 }

@@ -10,6 +10,6 @@ namespace API.Interfaces
         void DeletePost(Post post);
         Task UpdatePostContent(int id, string content);
         Task<Post> GetPost(int id);
-        Task<PaginatedList<PostDto>> GetPosts(UserParams userParams);
+        Task<PaginatedList<PostDto>> GetPosts(PaginationParams paginationParams);
     }
 }

@@ -12,6 +12,6 @@ export class PostsService {
   constructor(private http: HttpClient) { }
 
   createPost(model: any) {
-    return this.http.post<Post>(this.baseUrl + 'posts', model).subscribe();
+    return this.http.post(this.baseUrl + 'posts', model);
   }
 }
