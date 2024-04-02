@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { Member } from '../models/member';
 import { map, of, take } from 'rxjs';
 import { PaginatedResult } from '../models/pagination';
-import { UserParams } from '../models/userParams';
+import { PaginationParams } from '../models/paginationParams';
 import { AccountService } from './account.service';
 import { User } from '../models/user';
 import { getPaginatedResult, getPaginationHeaders } from './paginationHelper';
@@ -17,38 +17,37 @@ export class MembersService {
   members: Member[] = [];
   memberCache = new Map;
   user: User | undefined;
-  userParams: UserParams | undefined;
+  paginationParams: PaginationParams | undefined;
   
   constructor(private http: HttpClient, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({  
       next: user => {
         if(user){
-          //I'll probably expand userParams contructor so it will take user
-          this.userParams = new UserParams();
+          this.paginationParams = new PaginationParams();
           this.user = user;
         }
       }
     })
   }
 
-  getUsersParams() {
-    return this.userParams;
+  getPaginationParams() {
+    return this.paginationParams;
   }
 
-  setUserParams(userParams: UserParams) {
-    this.userParams = userParams;
+  setPaginationParams(paginationParams: PaginationParams) {
+    this.paginationParams = paginationParams;
   }
 
-  getMembers(userParams: UserParams) {
-    const response = this.memberCache.get(Object.values(userParams).join('-'));
+  getMembers(paginationParams: PaginationParams) {
+    const response = this.memberCache.get(Object.values(paginationParams).join('-'));
     if (response)
       return of(response);
 
-    let params = getPaginationHeaders(userParams.pageIndex, userParams.pageSize);
+    let params = getPaginationHeaders(paginationParams.pageIndex, paginationParams.pageSize);
 
     return getPaginatedResult<Member[]>(this.baseUrl + 'users', params, this.http).pipe(
       map(response => {
-        this.memberCache.set(Object.values(userParams).join('-'), response);
+        this.memberCache.set(Object.values(paginationParams).join('-'), response);
         return response;  
       }) 
     )
