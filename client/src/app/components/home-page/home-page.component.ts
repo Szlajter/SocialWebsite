@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Pagination } from 'src/app/models/pagination';
 import { PaginationParams } from 'src/app/models/paginationParams';
 import { Post } from 'src/app/models/post';
+import { AccountService } from 'src/app/services/account.service';
 import { MembersService } from 'src/app/services/members.service';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -15,7 +16,7 @@ export class HomePageComponent implements OnInit {
   paginationParams: PaginationParams | undefined;
   pagination: Pagination | undefined;
   
-  constructor(private postsService: PostsService) {
+  constructor(private postsService: PostsService, public accountService: AccountService) {
     this.paginationParams = this.postsService.getPaginationParams();
   }
 

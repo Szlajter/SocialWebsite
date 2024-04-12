@@ -70,6 +70,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<PaginatedList<PostDto>>> GetPosts([FromQuery]PaginationParams paginationParams)
         {
             var posts = await _unitOfWork.PostRepository.GetPosts(paginationParams);
