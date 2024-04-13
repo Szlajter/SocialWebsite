@@ -5,9 +5,10 @@
              (fileOver)="fileOverBase($event)"
              [uploader]="uploader">
              <!--  hiding input and invoking it's file upload function in an image, using template variable -->
-             <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickName}}" (click)="fileInput.click()" class="rounded-circle w-50">
+             <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.nickName}}" (click)="fileInput.click()" class="rounded-circle">
              <span style="visibility: hidden; position: absolute; overflow: hidden; width: 0px; height:0px;border:none;margin:0; padding:0">
-                  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" />
+                  <!-- clearing the value to make selecting the same fire fire the change event every time -->
+                  <input type="file" #fileInput ng2FileSelect [uploader]="uploader" onclick="this.value=null;" />
              </span>
         </div>
     </div>

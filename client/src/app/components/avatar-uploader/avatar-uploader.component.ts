@@ -1,11 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload'
+import { roLocale } from 'ngx-bootstrap/chronos';
 import { take } from 'rxjs';
 import { Member } from 'src/app/models/member';
 import { Photo } from 'src/app/models/photo';
 import { User } from 'src/app/models/user';
 import { AccountService } from 'src/app/services/account.service';
 import { BusyService } from 'src/app/services/busy.service';
+import { ConfirmService } from 'src/app/services/confirm.service';
 import { environment } from 'src/environments/environment.development';
 
 
@@ -22,8 +24,7 @@ export class AvatarUploaderComponent implements OnInit {
   baseUrl = environment.apiUrl;
   user: User | undefined;
 
-  //had to use busyService because this request just doesn't go throught interceptors
-  constructor(private accountService: AccountService, private busyService: BusyService) { 
+  constructor(private accountService: AccountService, private confirm: ConfirmService) { 
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
         if(user) this.user = user;
@@ -46,7 +47,7 @@ export class AvatarUploaderComponent implements OnInit {
       isHTML5: true,
       allowedFileType: ['image'],
       removeAfterUpload: true,
-      autoUpload: true,
+      autoUpload: false,
       maxFileSize: 10 * 1024 * 1024
     });
 
@@ -58,13 +59,25 @@ export class AvatarUploaderComponent implements OnInit {
         
         this.user.photoUrl = photo.url;
         this.accountService.setCurrentUser(this.user);
-        this.busyService.idle();
       }
     }
 
+
     this.uploader.onAfterAddingFile = (file) => {
+      // cors fix
       file.withCredentials = false;
-      this.busyService.busy();
+
+      if (this.uploader.queue.length > 1) {
+        this.uploader.removeFromQueue(this.uploader.queue[0]);
+      }
+
+      this.confirm.confirm().subscribe(
+        (result: boolean) => {
+          if (result) {
+            this.uploader.uploadAll();
+           } 
+        }
+      );
     };
   }
 }
