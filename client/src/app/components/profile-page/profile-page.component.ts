@@ -20,7 +20,9 @@ export class ProfilePageComponent implements OnInit {
   constructor(private memberService: MembersService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadMember();
+    this.route.params.subscribe(() => {
+      this.loadMember();
+    })
   }
 
   loadMember() {
