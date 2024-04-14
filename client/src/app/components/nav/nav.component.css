@@ -1,39 +1,31 @@
-.dropdownButton
-{
-    display: flex;
+.dropdownButton img {
+    max-width: 40px;
+    max-height: 40px;
 }
 
-.dropdownButton-text
-{
+.dropdownButton {
+    display: flex;
+    align-items: center;
+}
+
+.dropdownButton-text {
     margin-left: 10px;
     font-size: 16px;
     text-align: left;
-    
 }
 
-.dropdownButton-nickname
-{
+.dropdownButton-nickname {
     font-weight: bold;
 }
 
-.dropdownButton img
-{
-    max-height: 5vh;
-}
-
-.dropdownButton:hover
-{
+.dropdownButton:hover {
     color: white;
 }
 
-.dropdownButton:hover img
-{
+.dropdownButton:hover img {
     border: 1px solid white;
 }
 
-
-
-
-
-
- 
+.navbar {
+    min-height: 7vh;
+}

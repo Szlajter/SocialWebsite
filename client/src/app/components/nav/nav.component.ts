@@ -7,6 +7,8 @@ import { AccountService } from '../../services/account.service';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent {
+  isCollapsed: boolean = true;
+
   constructor(public accountService: AccountService) {}
 
   logout(){

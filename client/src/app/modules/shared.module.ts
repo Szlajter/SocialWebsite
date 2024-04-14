@@ -9,6 +9,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TimeagoModule } from "ngx-timeago";
+import { CollapseModule } from 'ngx-bootstrap/collapse';
 
 @NgModule({
   declarations: [],
@@ -26,7 +27,8 @@ import { TimeagoModule } from "ngx-timeago";
     BsDatepickerModule.forRoot(),
     PaginationModule.forRoot(),
     ModalModule.forChild(),
-    TimeagoModule.forRoot()
+    TimeagoModule.forRoot(),
+    CollapseModule.forRoot()  
   ],
   exports: [
     BsDropdownModule,
@@ -37,7 +39,8 @@ import { TimeagoModule } from "ngx-timeago";
     BsDatepickerModule,
     PaginationModule,
     ModalModule,
-    TimeagoModule
+    TimeagoModule,
+    CollapseModule
   ]
 })
 export class SharedModule { }
