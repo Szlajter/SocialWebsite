@@ -82,16 +82,16 @@ export class MembersService {
     return this.http.post(this.baseUrl + 'follows/follow/' + username, {});
   }
 
-  getFollowers(pageNumber: number, pageSize: number) {
+  getFollowers(userId:number, pageNumber: number, pageSize: number) {
     let params = getPaginationHeaders(pageNumber, pageSize);
 
-    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/followers', params, this.http);
+    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/followers/' + userId, params, this.http);
   }
 
-  getFollowing(pageNumber: number, pageSize: number) {
+  getFollowing(userId: number, pageNumber: number, pageSize: number) {
     let params = getPaginationHeaders(pageNumber, pageSize);
 
-    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/following', params, this.http);
+    return getPaginatedResult<Member[]>(this.baseUrl + 'follows/following/' + userId, params, this.http);
   }
 
   deleteFollow(username: string) {

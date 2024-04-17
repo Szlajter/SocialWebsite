@@ -1,0 +1,53 @@
+.profile-container {
+    margin-top: 50px;
+}
+
+.profile-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-tabs {
+    margin-top: 30px;
+}
+
+.profile-info {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.info-item {
+    margin-bottom: 10px;
+}
+
+.info-item label {
+    font-weight: bold;
+}
+
+.pagination-container {
+    margin-top: 20px;
+}
+
+.no-followers-message,
+.no-following-message {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.follower-card,
+.following-card {
+    margin-bottom: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+}
+

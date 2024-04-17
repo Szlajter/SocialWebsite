@@ -1,88 +1,103 @@
-<div *ngIf="member">
-    <img src="{{member.photoUrl || './assets/user.png'}}">
-    <tabset>
+<div class="container">
+    <div *ngIf="member" class="profile-container">
+        <div class="profile-header">
+            <img [src]="member.photoUrl || './assets/user.png'" class="profile-picture">
+            <h2>{{ member.userName }}</h2>
+            <p class="text-muted">@{{ member.nickName }}</p>
+        </div>
 
-        <tab heading="Data">
-            <p>{{member.userName}}</p>
-            <p>@{{member.nickName}}</p>
-            <p>{{member.age}}</p>
-            <p>{{member.city}}</p>
-            <p>{{member.country}}</p>
-            <p>{{member.description}}</p>
-            <p>{{member.gender}}</p>
-            <p>{{member.accountCreationDate | date: 'dd MMM yyyy'}}</p>
-            <!-- using angular-ecmascript-intl for now, but i will change it later because it shows weird statuses like "in 1 week" instead of "1 week ago"-->
-            <p>{{member.lastActive | timeago}}</p> 
-            <button routerLink="/messages" [queryParams]="{user: this.member.userName}">Send message</button>
-        </tab>
-
-        <!-- <tab heading="Photos">
-            <div *ngFor="let photo of member?.photos">
-                <img src="{{photo.url}}">
-            </div>
-        </tab> -->
-        
-        <tab heading="Followers" (selectTab)="loadFollowers()">
-            <div *ngIf="followers">
-                <div *ngFor="let member of followers">
-                    <app-member-card [member]="member"></app-member-card>
+        <tabset #staticTabs class="profile-tabs" [justified]="true">
+            <tab heading="Data">
+                <div class="profile-info">
+                    <div class="info-item">
+                        <label>Age:</label>
+                        <span>{{ member.age }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>City:</label>
+                        <span>{{ member.city }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Country:</label>
+                        <span>{{ member.country }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Description:</label>
+                        <span>{{ member.description }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Gender:</label>
+                        <span>{{ member.gender }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Member Since:</label>
+                        <span>{{ member.accountCreationDate | date: 'dd MMM yyyy' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <label>Last Active:</label>
+                        <span>{{ member.lastActive | timeago }}</span>
+                    </div>
+                    <button class="btn btn-primary" routerLink="/messages" [queryParams]="{user: member.userName}">Send Message</button>
                 </div>
+            </tab>
 
-                <div class="d-flex justify-content-center" *ngIf="pagination && pagination.totalItems > 0; else noFollowers">
-                    <pagination [boundaryLinks]="true" 
-                                [totalItems]="pagination.totalItems"
-                                [itemsPerPage]="pagination.itemsPerPage"
-                                [maxSize]="10"
-                                [(ngModel)]="pagination.currentPage"
-                                (pageChanged)="followersPageChanged($event)"
-                                previousText="&lsaquo;"
-                                nextText="&rsaquo;" 
-                                firstText="&laquo;" 
-                                lastText="&raquo;">
-                    </pagination>
-                </div>
+            <tab heading="Followers" (selectTab)="loadFollowers()">
+                <div *ngIf="followers" class="followers-container">
+                    <div *ngFor="let follower of followers" class="follower-card">
+                        <app-member-card [member]="follower"></app-member-card>
+                    </div>
 
-                <ng-template #noFollowers>
-                    <div class="container d-flex justify-content-center align-items-center" style="min-height: 50vh;">
-                        <div class="text-center">
-                        <h2 class="mb-4">You Haven't Followed Anyone Yet</h2>
-                        <p>Start following some users to see their updates and posts.</p>
+                    <div class="d-flex justify-content-center">
+                        <div class="pagination-container" *ngIf="pagination && pagination.totalItems > 0">
+                            <pagination [boundaryLinks]="true" 
+                                        [totalItems]="pagination.totalItems"
+                                        [itemsPerPage]="pagination.itemsPerPage"
+                                        [maxSize]="10"
+                                        [(ngModel)]="pagination.currentPage"
+                                        (pageChanged)="followersPageChanged($event)"
+                                        previousText="&lsaquo;"
+                                        nextText="&rsaquo;" 
+                                        firstText="&laquo;" 
+                                        lastText="&raquo;">
+                            </pagination>
                         </div>
                     </div>
-                </ng-template>
-            </div>
-        </tab>
 
-        <tab heading="Following" (selectTab)="loadFollowing()">
-            <div *ngIf="following">
-                <div *ngFor="let member of following">
-                    <app-member-card [member]="member"></app-member-card>
+                    <div class="no-followers-message" *ngIf="!followers || followers.length === 0">
+                        <h4>No followers yet</h4>
+                        <p>Start engaging with other users to grow your followers!</p>
+                    </div>
                 </div>
+            </tab>
 
-                <div class="d-flex justify-content-center" *ngIf="pagination  && pagination.totalItems > 0; else noFollowing">
-                    <pagination [boundaryLinks]="true" 
-                                [totalItems]="pagination.totalItems"
-                                [itemsPerPage]="pagination.itemsPerPage"
-                                [maxSize]="10"
-                                [(ngModel)]="pagination.currentPage"
-                                (pageChanged)="followingPageChanged($event)"
-                                previousText="&lsaquo;"
-                                nextText="&rsaquo;" 
-                                firstText="&laquo;" 
-                                lastText="&raquo;">
-                    </pagination>
-                </div>
-                
-                <ng-template #noFollowing>
-                    <div class="container d-flex justify-content-center align-items-center" style="min-height: 50vh;">
-                        <div class="text-center">
-                        <h2 class="mb-4">Nobody Has Followed You Yet</h2>
+            <tab heading="Following" (selectTab)="loadFollowing()">
+                <div *ngIf="following" class="following-container">
+                    <div *ngFor="let followed of following" class="following-card">
+                        <app-member-card [member]="followed"></app-member-card>
+                    </div>
+
+                    <div class="d-flex justify-content-center">
+                        <div class="pagination-container" *ngIf="pagination && pagination.totalItems > 0">
+                            <pagination [boundaryLinks]="true" 
+                                        [totalItems]="pagination.totalItems"
+                                        [itemsPerPage]="pagination.itemsPerPage"
+                                        [maxSize]="10"
+                                        [(ngModel)]="pagination.currentPage"
+                                        (pageChanged)="followersPageChanged($event)"
+                                        previousText="&lsaquo;"
+                                        nextText="&rsaquo;" 
+                                        firstText="&laquo;" 
+                                        lastText="&raquo;">
+                            </pagination>
                         </div>
                     </div>
-                </ng-template>
-            </div>
-        </tab>
 
-    </tabset>
+                    <div class="no-following-message" *ngIf="!following || following.length === 0">
+                        <h4>Not following anyone yet</h4>
+                        <p>Start exploring and follow interesting users!</p>
+                    </div>
+                </div>
+            </tab>
+        </tabset>
+    </div>
 </div>
-

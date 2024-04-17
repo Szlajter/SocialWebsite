@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { Member } from 'src/app/models/member';
 import { Pagination } from 'src/app/models/pagination';
 import { MembersService } from 'src/app/services/members.service';
@@ -10,6 +11,8 @@ import { MembersService } from 'src/app/services/members.service';
   styleUrls: ['./profile-page.component.css']
 })
 export class ProfilePageComponent implements OnInit {
+  @ViewChild('staticTabs', { static: false }) staticTabs?: TabsetComponent;
+  
   member: Member | undefined;
   followers: Member[] | undefined;
   following: Member[] | undefined;
@@ -22,6 +25,10 @@ export class ProfilePageComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(() => {
       this.loadMember();
+      
+      if (this.staticTabs?.tabs[0]) {
+        this.staticTabs.tabs[0].active = true;
+      }
     })
   }
 
@@ -34,7 +41,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   loadFollowers() {
-    this.memberService.getFollowers(this.pageIndex, this.pageSize).subscribe({
+    this.memberService.getFollowers(this.member!.id, this.pageIndex, this.pageSize).subscribe({
       next: response => {
         this.followers = response.result;
         this.pagination = response.pagination;
@@ -43,7 +50,7 @@ export class ProfilePageComponent implements OnInit {
   }
 
   loadFollowing() {
-    this.memberService.getFollowing(this.pageIndex, this.pageSize).subscribe({
+    this.memberService.getFollowing(this.member!.id, this.pageIndex, this.pageSize).subscribe({
       next: response => {
         this.following = response.result;
         this.pagination = response.pagination

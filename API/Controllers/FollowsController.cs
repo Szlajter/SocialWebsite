@@ -46,25 +46,23 @@ namespace API.Controllers
             return BadRequest("Failed to follow");
         }
 
-        [HttpGet("following")]
-        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowing([FromQuery]UserParams userParams)
+        [HttpGet("following/{id}")]
+        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowing(int id, [FromQuery]PaginationParams paginationParams)
         {
-            userParams.UserId = User.GetUserId();
-
-            var users = await _unitOfWork.FollowRepository.GetFollowing(userParams);
-
+            var users = await _unitOfWork.FollowRepository.GetFollowing(id, paginationParams);
+            
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, 
                 users.PageSize, 
                 users.TotalCount, 
                 users.TotalPages));
 
-            return  Ok(users);
+            return Ok(users);
         }
 
-        [HttpGet("followers")]
-        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowers([FromQuery]UserParams userParams)
+        [HttpGet("followers/{id}")]
+        public async Task<ActionResult<PaginatedList<FollowDto>>> GetFollowers(int id, [FromQuery]PaginationParams paginationParams)
         {
-            var users = await _unitOfWork.FollowRepository.GetFollowers(userParams);
+            var users = await _unitOfWork.FollowRepository.GetFollowers(id, paginationParams);
 
             Response.AddPaginationHeader(new PaginationHeader(users.PageIndex, 
                 users.PageSize, 

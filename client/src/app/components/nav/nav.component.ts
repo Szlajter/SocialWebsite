@@ -14,4 +14,8 @@ export class NavComponent {
   logout(){
     this.accountService.logout();
   }
+
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+  }
 }

@@ -20,12 +20,12 @@ namespace API.Data
             return await  _context.Follows.FindAsync(sourceUserId, targetUserId);
         }
 
-        public async Task<PaginatedList<FollowDto>> GetFollowers(UserParams userParams)
+        public async Task<PaginatedList<FollowDto>> GetFollowers(int userId, PaginationParams paginationParams)
         {
             var users =_context.Users
                 .OrderBy(u => u.UserName).AsQueryable();
             var follows = _context.Follows.
-                Where(follow => follow.TargetUserId == userParams.UserId).AsQueryable();
+                Where(follow => follow.TargetUserId == userId).AsQueryable();
 
             users = follows.Select(follow => follow.SourceUser);
 
@@ -37,15 +37,15 @@ namespace API.Data
                 PhotoUrl = user.ProfilePicture.Url
             });
 
-            return await PaginatedList<FollowDto>.CreateAsync(followingUsers, userParams.PageIndex, userParams.PageSize);
+            return await PaginatedList<FollowDto>.CreateAsync(followingUsers, paginationParams.PageIndex, paginationParams.PageSize);
         }
 
-        public async Task<PaginatedList<FollowDto>> GetFollowing(UserParams userParams)
+        public async Task<PaginatedList<FollowDto>> GetFollowing(int userId, PaginationParams paginationParams)
         {
             var users =_context.Users
                 .OrderBy(u => u.UserName).AsQueryable();
             var follows = _context.Follows
-                 .Where(follow => follow.SourceUserId == userParams.UserId).AsQueryable();
+                 .Where(follow => follow.SourceUserId == userId).AsQueryable();
 
             users = follows.Select(follow => follow.TargetUser);
 
@@ -57,7 +57,7 @@ namespace API.Data
                 PhotoUrl = user.ProfilePicture.Url
             });
 
-            return await PaginatedList<FollowDto>.CreateAsync(followedUsers, userParams.PageIndex, userParams.PageSize);
+            return await PaginatedList<FollowDto>.CreateAsync(followedUsers, paginationParams.PageIndex, paginationParams.PageSize);
         }
 
         public async Task<User> GetUserWithFollows(int userId)
