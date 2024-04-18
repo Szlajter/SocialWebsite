@@ -1,31 +1,39 @@
-<div class="full-width">
-    <div style="width: 18%; float: left;">
-        <ul>
-            <!-- will change it later. It will return other dto so ifs will disappear-->
-            <li *ngFor="let chat of chats" (click)="setChattingWithUsername(chat)" (click)="this.currentConversation?.loadMessages()">
-                <img *ngIf="chat?.senderUsername == this.username; else senderPhoto" 
-                     src="{{chat?.recipientPhotoUrl}}"
-                     alt=""
-                     [class.is-online]="(statusService.onlineUsers$ | async)?.includes(chat.recipientUsername)">
-                <ng-template #senderPhoto>
-                    <img src="{{chat?.senderPhotoUrl}}" 
-                         alt=""
-                         [class.is-online]="(statusService.onlineUsers$ | async)?.includes(chat.senderUsername)">
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-unstyled">
+                <ng-container *ngIf="chats && chats.length > 0; else noChats">
+                    <li *ngFor="let chat of chats" (click)="setChattingWithUsername(chat)" (click)="this.currentConversation?.loadMessages()">
+                        <img *ngIf="chat?.senderUsername == this.username; else senderPhoto" 
+                            src="{{chat?.recipientPhotoUrl}}"
+                            alt=""
+                            [class.is-online]="(statusService.onlineUsers$ | async)?.includes(chat.recipientUsername)">
+                        <ng-template #senderPhoto>
+                            <img src="{{chat?.senderPhotoUrl}}" 
+                                alt=""
+                                [class.is-online]="(statusService.onlineUsers$ | async)?.includes(chat.senderUsername)">
+                        </ng-template>
+                        <div>
+                            <h2 *ngIf="chat?.senderUsername == this.username; else senderUsername">{{chat?.recipientUsername}}</h2>
+                            <ng-template #senderUsername>
+                                <h2>{{chat?.senderUsername}}</h2>
+                            </ng-template>
+                            <h3>
+                                {{chat?.senderUsername}}: {{ chat?.content }}  
+                            </h3>
+                        </div>
+                    </li>
+                </ng-container>
+                <ng-template #noChats>
+                    <div class="no-chats-message p-3 mb-3">
+                        <p class="mb-1">No chats available</p>
+                        <small>You can start a conversation by clicking on someone's profile.</small>
+                    </div>
                 </ng-template>
-                <div>
-                    <h2 *ngIf="chat?.senderUsername == this.username; else senderUsername">{{chat?.recipientUsername}}</h2>
-                    <ng-template #senderUsername>
-                        <h2>{{chat?.senderUsername}}</h2>
-                    </ng-template>
-                    <h3>
-                       {{chat?.senderUsername}}: {{ chat?.content }}  
-                    </h3>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div style="width: 80%; float: left;">
-        <app-conversation [chattingWithUsername]="chattingWithUsername"></app-conversation>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <app-conversation [chattingWithUsername]="chattingWithUsername" (reloadChats)="loadChats()"></app-conversation>
+        </div>
     </div>
 </div>
-

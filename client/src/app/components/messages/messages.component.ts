@@ -35,7 +35,6 @@ export class MessagesComponent implements OnInit{
       this.pageNumber = event.page;
     }
   }
-  //when trying to send a message to a new person, that person is not visible on the left side.
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
       this.chats = response;

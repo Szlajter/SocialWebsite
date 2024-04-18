@@ -1,14 +1,16 @@
 <div *ngIf="user">
+    <div class="chat-header" *ngIf="this.chattingWithUsername">
+        <h4>Chatting with {{ chattingWithUsername }}</h4>
+        <hr>
+    </div>
     <div *ngIf="(messageService.conversation$ | async)!.length > 0">
         <ul class="chat"
             #scroll
             [scrollTop]="scroll.scrollHeight">
             <li *ngFor="let message of (messageService.conversation$ | async)">
-                <div>
-                    <span class="chat-img float-begin">
-                        <img class="rounded-circle" src="{{message.senderPhotoUrl || './assets/user.png'}}" alt=""> 
-                    </span>
+                <div class="d-flex justify-content-between align-items-center">
                     <div class="chat-body">
+                        <img class="rounded-circle" src="{{message.senderPhotoUrl || './assets/user.png'}}" alt=""> 
                         <div class="header">
                             <small class="text-muted">
                                 <span class="fa fa-clock-o">{{message.messageSent | timeago}}</span>
@@ -16,11 +18,9 @@
                                 <span class="text-success" *ngIf="message.dateRead && message.senderUsername == user.username">(read {{message.dateRead | timeago}})</span>
                             </small>
                         </div>
-                        <div class="d-flex ">
-                            <p>{{message.content}} </p>
-                            <button class="btn btn-secondary btn-sm" (click)="deleteMessage(message.id)">Delete Message</button>
-                        </div>
+                        <p>{{message.content}} </p>
                     </div>
+                    <button class="btn btn-secondary btn-sm" (click)="deleteMessage(message.id)">Delete Message</button>
                 </div>
             </li>
         </ul>
