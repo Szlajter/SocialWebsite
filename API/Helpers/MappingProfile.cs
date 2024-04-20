@@ -2,7 +2,6 @@ using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using AutoMapper;
-using Microsoft.JSInterop.Infrastructure;
 
 namespace API.Helpers
 {
@@ -28,11 +27,21 @@ namespace API.Helpers
                 .ForMember(dest => dest.AuthorNickname, opt => opt.MapFrom(src => src.Author.NickName))
                 .ForMember(dest => dest.AuthorUsername, opt => opt.MapFrom(src => src.Author.UserName))
                 .ForMember(dest => dest.AuthorPhotoUrl, opt => opt.MapFrom(src => src.Author.ProfilePicture.Url))
+                .ForMember(dest => dest.commentCount, opt => opt.MapFrom(src => src.Comments.Count))
                 .ForMember(dest => dest.LikedByCount, opt => opt.MapFrom(src => src.LikedBy.Count))
                 .ForMember(dest => dest.DislikedByCount, opt => opt.MapFrom(src => src.DislikedBy.Count))
                 .ForMember(dest => dest.hasLiked, opt => opt.MapFrom(u => u.LikedBy.Any(u => u.UserName == currentUserName)))
-                .ForMember(dest => dest.hasDisliked, opt => opt.MapFrom(u => u.DislikedBy.Any(u => u.UserName == currentUserName)))
-                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments));
+                .ForMember(dest => dest.hasDisliked, opt => opt.MapFrom(u => u.DislikedBy.Any(u => u.UserName == currentUserName)));
+            CreateMap<Post, PostWithCommentsDto>()
+                .ForMember(dest => dest.AuthorNickname, opt => opt.MapFrom(src => src.Author.NickName))
+                .ForMember(dest => dest.AuthorUsername, opt => opt.MapFrom(src => src.Author.UserName))
+                .ForMember(dest => dest.AuthorPhotoUrl, opt => opt.MapFrom(src => src.Author.ProfilePicture.Url))
+                .ForMember(dest => dest.commentCount, opt => opt.MapFrom(src => src.Comments.Count))
+                .ForMember(dest => dest.Comments, opt => opt.MapFrom(src => src.Comments))
+                .ForMember(dest => dest.LikedByCount, opt => opt.MapFrom(src => src.LikedBy.Count))
+                .ForMember(dest => dest.DislikedByCount, opt => opt.MapFrom(src => src.DislikedBy.Count))
+                .ForMember(dest => dest.hasLiked, opt => opt.MapFrom(u => u.LikedBy.Any(u => u.UserName == currentUserName)))
+                .ForMember(dest => dest.hasDisliked, opt => opt.MapFrom(u => u.DislikedBy.Any(u => u.UserName == currentUserName)));
             //entity framework refuses to return dates as utc so mapping is required.
             CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
             CreateMap<DateTime?, DateTime?>().ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);

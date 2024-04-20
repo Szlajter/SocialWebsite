@@ -9,6 +9,8 @@ export interface Post {
     datePosted: Date;
     isEdited: boolean;
     idDeleted: boolean;
+    commentCount: number;
+    comments: Post[];
     likedByCount: number;
     dislikedByCount: number;
     hasLiked: boolean;

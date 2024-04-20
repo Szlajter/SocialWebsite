@@ -1,0 +1,7 @@
+<div *ngIf="post">
+    <app-post-card [post]="post"></app-post-card>
+
+    <div *ngFor="let post of post.comments">
+        <app-post-card [post]="post"></app-post-card>
+    </div>
+</div>

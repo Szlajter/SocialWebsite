@@ -28,6 +28,10 @@ export class PostsService {
     return this.http.post(this.baseUrl + 'posts', model);
   }
 
+  getPost(id: string) {
+    return this.http.get<Post>(this.baseUrl + 'posts/' + id);
+  }
+
   getPosts(paginationParams: PaginationParams) {
     let params = getPaginationHeaders(paginationParams.pageIndex, paginationParams.pageSize);
 

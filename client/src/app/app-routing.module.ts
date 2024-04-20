@@ -16,6 +16,7 @@ import { PendingChangesGuard } from './guards/pending-changes.guard';
 import { MessagesComponent } from './components/messages/messages.component';
 import { AdminPanelComponent } from './components/admin/admin-panel/admin-panel.component';
 import { adminGuard } from './guards/admin.guard';
+import { CommentPageComponent } from './components/comment-page/comment-page.component';
 
 const routes: Routes = [
   {path: '', component: HomePageComponent},
@@ -25,6 +26,7 @@ const routes: Routes = [
     children: [
       {path: 'edit-profile-page', component: EditProfilePageComponent, canDeactivate: [PendingChangesGuard]},
       {path: 'messages', component: MessagesComponent},
+      {path: 'post/:id', component: CommentPageComponent},
       {path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard]}
     ]
   },

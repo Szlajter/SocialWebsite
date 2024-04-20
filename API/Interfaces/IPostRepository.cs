@@ -10,6 +10,7 @@ namespace API.Interfaces
         void DeletePost(Post post);
         Task UpdatePostContent(int id, string content);
         Task<Post> GetPost(int id);
+        Task<PostWithCommentsDto> GetPostWithComments(int id);
         Task<PaginatedList<PostDto>> GetPosts(string username, PaginationParams paginationParams);
         void addLike(User user, Post post);
         void addDislike(User user, Post post);

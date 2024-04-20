@@ -32,6 +32,7 @@ import { RolesModalComponent } from './components/modals/roles-modal/roles-modal
 import { ConfirmModalComponent } from './components/modals/confirm-modal/confirm-modal.component';
 import { CreatePostComponent } from './components/create-post/create-post.component';
 import { PostCardComponent } from './components/post-card/post-card.component';
+import { CommentPageComponent } from './components/comment-page/comment-page.component';
 
 
 
@@ -61,6 +62,7 @@ import { PostCardComponent } from './components/post-card/post-card.component';
     ConfirmModalComponent,
     CreatePostComponent,
     PostCardComponent,
+    CommentPageComponent,
   ],
   imports: [
     BrowserModule,

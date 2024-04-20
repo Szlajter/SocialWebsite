@@ -8,7 +8,7 @@
       <p>{{post.content}}</p>
     </div>
     <div class="card-footer">
-        <button class="fa fa-comment btn"></button>
+        <button class="fa fa-comment btn" routerLink="/post/{{post.id}}"> {{post.commentCount}}</button>
         <button class="fa fa-thumbs-up btn" (click)="likePost()" [style.color]="post.hasLiked ? 'green' : ''"> {{post.likedByCount}}</button>
         <button class="fa fa-thumbs-down btn" (click)="dislikePost()" [style.color]="post.hasDisliked ? 'red' : ''"> {{post.dislikedByCount}}</button>
     </div>

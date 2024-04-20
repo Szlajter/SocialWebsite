@@ -57,16 +57,16 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostDto>> GetPost(int id)
+        public async Task<ActionResult<PostWithCommentsDto>> GetPost(int id)
         {
-            var post = await _unitOfWork.PostRepository.GetPost(id);
+            var post = await _unitOfWork.PostRepository.GetPostWithComments(id);
 
             if (post == null)
             {
                 return NotFound();
             }
 
-            return Ok(_mapper.Map<PostDto>(post));
+            return Ok(post);
         }
 
         [HttpGet]
