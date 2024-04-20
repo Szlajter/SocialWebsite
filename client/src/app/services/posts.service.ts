@@ -33,4 +33,12 @@ export class PostsService {
 
     return getPaginatedResult<Post[]>(this.baseUrl + 'posts', params, this.http);
   }
+
+  likePost(id: number) {
+    return this.http.post<number>(this.baseUrl + 'posts/' + id + '/like', {});
+  }
+
+  dislikePost(id: number) {
+    return this.http.post<number>(this.baseUrl +  'posts/' + id + '/dislike', {});
+  }
 }

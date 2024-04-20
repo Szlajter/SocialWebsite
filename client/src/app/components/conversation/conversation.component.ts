@@ -14,7 +14,6 @@
   export class ConversationComponent {
     @ViewChild('messageForm') messageForm?: NgForm;
     @Input() chattingWithUsername?: string;
-    @Output() reloadChats: EventEmitter<any> = new EventEmitter<any>(); 
     user?: User;
     messageContent = '';
 
@@ -46,11 +45,10 @@
       if(!this.chattingWithUsername) return;
         this.messageService.sendMessage(this.chattingWithUsername, this.messageContent).then(() => {
         this.messageForm?.reset();
-        this.reloadChats.emit();
       })
     }
 
     deleteMessage(id: number) {
-      this.messageService.DeleteMessage(id);
+      this.messageService.deleteMessage(id);
     }
   }

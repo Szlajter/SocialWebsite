@@ -35,6 +35,7 @@ export class MessagesComponent implements OnInit{
       this.pageNumber = event.page;
     }
   }
+  
   loadChats() {
     this.messageService.getChatList().subscribe(response =>{
       this.chats = response;

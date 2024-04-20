@@ -1,9 +1,16 @@
 // only minimum for now. will add media, comments and likes later.
 export interface Post {
     id: number;
-    creatorId: number;
+    authorId: number;
+    authorUsername: string;
+    authorNickname: string;
+    authorPhotoUrl: string;
     content: string;
-    datePost: Date;
+    datePosted: Date;
     isEdited: boolean;
     idDeleted: boolean;
+    likedByCount: number;
+    dislikedByCount: number;
+    hasLiked: boolean;
+    hasDisliked: boolean;
 }

@@ -31,19 +31,20 @@ namespace API.Data
 
         public async Task<Post> GetPost(int id)
         {
-            return await _context.Posts.FindAsync(id);
+            return await _context.Posts
+                .Include(p => p.LikedBy) 
+                .Include(p => p.DislikedBy) 
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public async Task<PaginatedList<PostDto>> GetPosts(PaginationParams paginationParams)
+        public async Task<PaginatedList<PostDto>> GetPosts(string username, PaginationParams postParams)
         {
             var query = _context.Posts
                 .OrderByDescending(x => x.DatePosted)
                 .AsQueryable();
 
-            // remember to change mapping profile
-            var posts = query.ProjectTo<PostDto>(_mapper.ConfigurationProvider);
-
-            return await PaginatedList<PostDto>.CreateAsync(posts, paginationParams.PageIndex, paginationParams.PageSize);
+            var posts = query.ProjectTo<PostDto>(_mapper.ConfigurationProvider, new { currentUserName = username});
+            return await PaginatedList<PostDto>.CreateAsync(posts, postParams.PageIndex, postParams.PageSize);
         }
 
         public async Task UpdatePostContent(int id, string content)
@@ -53,6 +54,40 @@ namespace API.Data
                 .ExecuteUpdateAsync(b => b
                     .SetProperty(u => u.Content, content)
                     .SetProperty(u => u.IsEdited, true));
+        }
+
+        public void addLike(User user, Post post)
+        {
+            if (post.LikedBy.Contains(user))
+            {
+                post.LikedBy.Remove(user);
+            } 
+            else if (post.DislikedBy.Contains(user))
+            {
+                post.DislikedBy.Remove(user);
+                post.LikedBy.Add(user);
+            }
+            else
+            {
+                post.LikedBy.Add(user);
+            }
+        }
+
+        public void addDislike(User user, Post post)
+        {
+            if (post.DislikedBy.Contains(user))
+            {
+                post.DislikedBy.Remove(user);
+            } 
+            else if (post.LikedBy.Contains(user))
+            {
+                post.LikedBy.Remove(user);
+                post.DislikedBy.Add(user);
+            }
+            else
+            {
+                post.DislikedBy.Add(user);
+            }
         }
     }
 }   

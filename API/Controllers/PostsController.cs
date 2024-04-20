@@ -73,7 +73,9 @@ namespace API.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<PaginatedList<PostDto>>> GetPosts([FromQuery]PaginationParams paginationParams)
         {
-            var posts = await _unitOfWork.PostRepository.GetPosts(paginationParams);
+            var username = User.GetUsername();
+
+            var posts = await _unitOfWork.PostRepository.GetPosts(username, paginationParams);
 
             Response.AddPaginationHeader(new PaginationHeader(posts.PageIndex, posts.PageSize, posts.TotalCount, posts.TotalPages));
 
@@ -94,5 +96,58 @@ namespace API.Controllers
         // {
 
         // }
+
+        // todo: make getters smaller and faster.
+        [HttpPost("{id}/like")]
+        public async Task<ActionResult> likePost(int id) 
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            if (user == null) 
+            {
+                return NotFound();
+            }
+
+            var post = await _unitOfWork.PostRepository.GetPost(id);
+
+            if (post == null) 
+            {
+               return NotFound();
+            }
+
+            _unitOfWork.PostRepository.addLike(user, post);
+
+            if (await _unitOfWork.Complete())
+            {
+                return Ok();
+            }
+            return BadRequest("Failed to like");
+        }
+
+        [HttpPost("{id}/dislike")]
+        public async Task<ActionResult<int>> dislikePost(int id) 
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
+
+            if (user == null) 
+            {
+                return NotFound();
+            }
+
+            var post = await _unitOfWork.PostRepository.GetPost(id);
+
+            if (post == null) 
+            {
+               return NotFound();
+            }
+
+            _unitOfWork.PostRepository.addDislike(user, post);
+
+            if (await _unitOfWork.Complete())
+            {
+                return Ok();
+            }
+            return BadRequest("Failed to like");
+        }
     }
 }

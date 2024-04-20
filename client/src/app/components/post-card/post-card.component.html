@@ -1,15 +1,16 @@
 <div class="card" *ngIf="post">
     <div class="card-header">
-        <img src="https://pbs.twimg.com/profile_images/1111729635610382336/_65QFl7B_reasonably_small.png" alt="Profile Picture" class="card-img rounded-circle">
-        username
+        <img src="{{post.authorPhotoUrl}}" alt="Profile Picture" class="card-img rounded-circle">
+        <span class="fw-bold me-1">{{post.authorNickname}}</span>
+        @{{post.authorUsername}}
     </div>
     <div class="card-body">
       <p>{{post.content}}</p>
     </div>
     <div class="card-footer">
-        <i class="fa fa-comment"></i>
-        <i class="fa fa-thumbs-up"></i>
-        <i class="fa fa-thumbs-down"></i>
+        <button class="fa fa-comment btn"></button>
+        <button class="fa fa-thumbs-up btn" (click)="likePost()" [style.color]="post.hasLiked ? 'green' : ''"> {{post.likedByCount}}</button>
+        <button class="fa fa-thumbs-down btn" (click)="dislikePost()" [style.color]="post.hasDisliked ? 'red' : ''"> {{post.dislikedByCount}}</button>
     </div>
   </div>
   

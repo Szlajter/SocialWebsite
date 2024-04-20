@@ -95,7 +95,7 @@ export class MessagesService {
       .catch(error => console.log(error));
   }
 
-  DeleteMessage(id: number) {
+  async deleteMessage(id: number) {
     return this.hubConnection?.invoke('DeleteMessage', id)
       .catch(error => console.log(error));
   }
