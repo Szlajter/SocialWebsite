@@ -29,3 +29,8 @@
 .navbar {
     min-height: 7vh;
 }
+
+.dropdown-menu {
+    width: calc(100%); 
+}
+

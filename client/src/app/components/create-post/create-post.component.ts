@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -8,6 +8,7 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./create-post.component.css']
 })
 export class CreatePostComponent implements OnInit {
+  @Input() parentPostId?: number;  
   username: string | undefined;
   profilePictureUrl: string | undefined;
   model: any = { };
@@ -20,6 +21,9 @@ export class CreatePostComponent implements OnInit {
   }
 
   createPost() {
+    if (this.parentPostId) {
+      this.model.parentPostId = this.parentPostId;
+    }
     this.postsService.createPost(this.model).subscribe({
       next: () => this.toastr.success("Succesfully created a new post!")
     });

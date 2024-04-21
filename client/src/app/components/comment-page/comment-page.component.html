@@ -1,5 +1,6 @@
 <div *ngIf="post">
     <app-post-card [post]="post"></app-post-card>
+    <app-create-post [parentPostId]="post.id"></app-create-post>
 
     <div *ngFor="let post of post.comments">
         <app-post-card [post]="post"></app-post-card>

@@ -49,7 +49,7 @@ export class AccountService {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
     this.statusService.stopHubConnection();
-    window.location.reload();
+    this.router.navigate(['../']);
   }
 
   //atob is marked as deprecated, but it has a second overload that remains functional.

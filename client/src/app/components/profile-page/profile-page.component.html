@@ -10,31 +10,31 @@
             <tab heading="Data">
                 <div class="profile-info">
                     <div class="info-item">
-                        <label>Age:</label>
+                        <label>Age: </label>
                         <span>{{ member.age }}</span>
                     </div>
                     <div class="info-item">
-                        <label>City:</label>
+                        <label>City: </label>
                         <span>{{ member.city }}</span>
                     </div>
                     <div class="info-item">
-                        <label>Country:</label>
+                        <label>Country: </label>
                         <span>{{ member.country }}</span>
                     </div>
                     <div class="info-item">
-                        <label>Description:</label>
+                        <label>Description: </label>
                         <span>{{ member.description }}</span>
                     </div>
                     <div class="info-item">
-                        <label>Gender:</label>
+                        <label>Gender: </label>
                         <span>{{ member.gender }}</span>
                     </div>
                     <div class="info-item">
-                        <label>Member Since:</label>
+                        <label>Member Since: </label>
                         <span>{{ member.accountCreationDate | date: 'dd MMM yyyy' }}</span>
                     </div>
                     <div class="info-item">
-                        <label>Last Active:</label>
+                        <label>Last Active: </label>
                         <span>{{ member.lastActive | timeago }}</span>
                     </div>
                     <button class="btn btn-primary" routerLink="/messages" [queryParams]="{user: member.userName}">Send Message</button>

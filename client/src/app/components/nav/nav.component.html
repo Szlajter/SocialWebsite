@@ -23,12 +23,13 @@
           </li>
         </ng-container>
       </ul>
-
-      <div *ngIf="!(accountService.currentUser$ | async)">
-        <button class="btn btn-light me-2" routerLink="/login-page" routerLinkActive="active">Login</button>
-        <button class="btn btn-light" routerLink="/register-page" routerLinkActive="active">Register</button>
-      </div>
     </div>
+    
+    <div *ngIf="!(accountService.currentUser$ | async)" class="ms-auto">
+      <button class="btn btn-light me-2" routerLink="/login-page" routerLinkActive="active">Login</button>
+      <button class="btn btn-light" routerLink="/register-page" routerLinkActive="active">Register</button>
+    </div>
+
     
     <div class="dropdown position-absolute end-0 top-0" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
       <button dropdownToggle type="button" class="btn dropdownButton">
