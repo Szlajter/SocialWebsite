@@ -8,42 +8,11 @@ using API.Services;
 using API.SignalR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// services
-// todo: clean it up by moving them to methods
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(opt =>
-{
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
-    opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        In = ParameterLocation.Header,
-        Description = "Please enter token",
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        BearerFormat = "JWT",
-        Scheme = "bearer"
-    });
-
-    opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type=ReferenceType.SecurityScheme,
-                    Id="Bearer"
-                }
-            },
-            new string[]{}
-        }
-    });
-});
+builder.Services.RegisterSwagger();
 builder.Services.AddDbContext<ApplicationDbContext>(
     options => options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddCors();
@@ -51,9 +20,7 @@ builder.Services.AddSignalR();
 builder.Services.AddSingleton<StatusTracker>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddIdentityServices(builder.Configuration);
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinaryCredentials"));  
 builder.Services.AddScoped<IPhotoService, PhotoService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -61,30 +28,18 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 
 var app = builder.Build();
 
-// pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
+app.ConfigureSwagger();
 app.UseMiddleware<ExceptionMiddleware>();
-
 app.UseMiddleware<ActivityMiddleware>();
-
 app.UseCors(builder => builder
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()
     .WithOrigins("http://localhost:4200"));
-
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.UseDefaultFiles();
-
 app.MapControllers();
 app.MapHub<StatusHub>("hubs/status");
 app.MapHub<MessageHub>("hubs/message");
