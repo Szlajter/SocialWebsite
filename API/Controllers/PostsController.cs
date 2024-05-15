@@ -1,10 +1,8 @@
-using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,12 +12,10 @@ namespace API.Controllers
     public class PostsController: BaseApiController
     {
         private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
 
-        public PostsController(IUnitOfWork unitOfWork, IMapper mapper)
+        public PostsController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            _mapper = mapper;
         }
 
         [HttpPost]
@@ -57,7 +53,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<PostWithCommentsDto>> GetPost(int id)
+        public async Task<ActionResult<PostDto>> GetPost(int id)
         {
             var post = await _unitOfWork.PostRepository.GetPostWithComments(id);
 
@@ -91,15 +87,32 @@ namespace API.Controllers
             return Ok();
         }
 
-        // [HttpDelete("{id}")] 
-        // public async Task<ActionResult> DeletePost(int id)
-        // {
+        // Cascade delete wasn't working on self referencing parent-child
+        [HttpDelete("{id}")] 
+        public async Task<ActionResult> DeletePost(int id)
+        {
+            var post = await _unitOfWork.PostRepository.GetPost(id);
 
-        // }
+            if (post == null) 
+            {
+                return NotFound();
+            }
 
-        // todo: make getters smaller and faster.
+            var postsToDelete = await _unitOfWork.PostRepository.GetComments(post.Id);
+            postsToDelete.Add(post);
+
+            _unitOfWork.PostRepository.DeletePosts(postsToDelete);
+
+            if (await _unitOfWork.Complete())
+            {
+                return Ok();
+            }
+            return BadRequest("Failed to delete the post.");
+        }
+
+        // todo: think about separating rating 
         [HttpPost("{id}/like")]
-        public async Task<ActionResult> likePost(int id) 
+        public async Task<ActionResult> LikePost(int id) 
         {
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
@@ -115,7 +128,7 @@ namespace API.Controllers
                return NotFound();
             }
 
-            _unitOfWork.PostRepository.addLike(user, post);
+            _unitOfWork.PostRepository.AddLike(user, post);
 
             if (await _unitOfWork.Complete())
             {
@@ -125,7 +138,7 @@ namespace API.Controllers
         }
 
         [HttpPost("{id}/dislike")]
-        public async Task<ActionResult<int>> dislikePost(int id) 
+        public async Task<ActionResult<int>> DislikePost(int id) 
         {
             var user = await _unitOfWork.UserRepository.GetUserByUsernameAsync(User.GetUsername());
 
@@ -141,7 +154,7 @@ namespace API.Controllers
                return NotFound();
             }
 
-            _unitOfWork.PostRepository.addDislike(user, post);
+            _unitOfWork.PostRepository.AddDislike(user, post);
 
             if (await _unitOfWork.Complete())
             {
@@ -151,3 +164,4 @@ namespace API.Controllers
         }
     }
 }
+

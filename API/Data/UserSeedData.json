@@ -10,147 +10,143 @@
         "City": "Greenbush",
         "Country": "Martinique",
         "ProfilePicture": 
-            {
-                "Url": "https://randomuser.me/api/portraits/women/51.jpg"
-            }
-
-    },
-    [
         {
-            "UserName": "Alicia",
-            "Gender": "female",
-            "Birthdate": "1989-07-05",
-            "NickName": "Ali",
-            "Created": "2018-11-20",
-            "LastActive": "2022-03-15",
-            "Description": "Consectetur adipisicing minim labore nostrud amet laborum pariatur eiusmod dolore eiusmod tempor exercitation.",
-            "City": "Newtown",
-            "Country": "Canada",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/women/43.jpg"
-                }
-        },
-        {
-            "UserName": "Brandon",
-            "Gender": "male",
-            "Birthdate": "1977-04-13",
-            "NickName": "Bran",
-            "Created": "2017-09-18",
-            "LastActive": "2022-01-20",
-            "Description": "Eu adipisicing culpa consequat culpa irure.",
-            "City": "Springfield",
-            "Country": "United States",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/men/13.jpg"
-                }
-        },
-        {
-            "UserName": "Emma",
-            "Gender": "female",
-            "Birthdate": "1992-12-20",
-            "NickName": "Em",
-            "Created": "2019-02-10",
-            "LastActive": "2021-12-05",
-            "Description": "Labore sint amet eiusmod ut labore.",
-            "City": "Riverside",
-            "Country": "Australia",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/women/18.jpg"
-                }
-        },
-        {
-            "UserName": "Christopher",
-            "Gender": "male",
-            "Birthdate": "1985-09-29",
-            "NickName": "Chris",
-            "Created": "2016-08-05",
-            "LastActive": "2023-05-21",
-            "Description": "Tempor incididunt enim aute aliqua ullamco pariatur excepteur laboris magna tempor ullamco ad ad incididunt.",
-            "City": "Oakland",
-            "Country": "United Kingdom",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/men/81.jpg"
-                }
-        },
-        {
-            "UserName": "Sophia",
-            "Gender": "female",
-            "Birthdate": "1983-03-14",
-            "NickName": "Soph",
-            "Created": "2017-06-30",
-            "LastActive": "2022-04-18",
-            "Description": "Incididunt fugiat aliqua enim velit enim cillum nostrud exercitation dolore laboris.",
-            "City": "Madrid",
-            "Country": "Spain",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/women/75.jpg"
-                }
-        },
-        {
-            "UserName": "Ryan",
-            "Gender": "male",
-            "Birthdate": "1996-11-08",
-            "NickName": "Ry",
-            "Created": "2019-10-25",
-            "LastActive": "2022-02-11",
-            "Description": "Laborum velit aute minim irure in consequat eiusmod consectetur commodo.",
-            "City": "Paris",
-            "Country": "France",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/men/12.jpg"
-                }
-        },
-        {
-            "UserName": "Isabella",
-            "Gender": "female",
-            "Birthdate": "1970-08-17",
-            "NickName": "Bella",
-            "Created": "2015-12-12",
-            "LastActive": "2023-03-30",
-            "Description": "Quis labore commodo anim pariatur adipisicing aute consequat nostrud occaecat incididunt.",
-            "City": "Berlin",
-            "Country": "Germany",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/women/48.jpg"
-                }
-        },
-        {
-            "UserName": "Nathan",
-            "Gender": "male",
-            "Birthdate": "1980-05-02",
-            "NickName": "Nate",
-            "Created": "2018-04-03",
-            "LastActive": "2023-01-28",
-            "Description": "Non ex nisi culpa exercitation velit elit id labore nostrud.",
-            "City": "Tokyo",
-            "Country": "Japan",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/men/65.jpg"
-                }
-        },
-        {
-            "UserName": "Olivia",
-            "Gender": "female",
-            "Birthdate": "1993-01-30",
-            "NickName": "Liv",
-            "Created": "2020-09-15",
-            "LastActive": "2022-06-19",
-            "Description": "Tempor aute consequat fugiat enim dolore.",
-            "City": "Sydney",
-            "Country": "Australia",
-            "ProfilePicture": 
-                {
-                    "Url": "https://randomuser.me/api/portraits/women/5.jpg"
-                }
+            "Url": "https://randomuser.me/api/portraits/women/51.jpg"
         }
-    ]
-    
+    },
+    {
+        "UserName": "Alicia",
+        "Gender": "female",
+        "Birthdate": "1989-07-05",
+        "NickName": "Ali",
+        "Created": "2018-11-20",
+        "LastActive": "2022-03-15",
+        "Description": "Consectetur adipisicing minim labore nostrud amet laborum pariatur eiusmod dolore eiusmod tempor exercitation.",
+        "City": "Newtown",
+        "Country": "Canada",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/women/43.jpg"
+        }
+    },
+    {
+        "UserName": "Brandon",
+        "Gender": "male",
+        "Birthdate": "1977-04-13",
+        "NickName": "Bran",
+        "Created": "2017-09-18",
+        "LastActive": "2022-01-20",
+        "Description": "Eu adipisicing culpa consequat culpa irure.",
+        "City": "Springfield",
+        "Country": "United States",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/men/13.jpg"
+        }
+    },
+    {
+        "UserName": "Emma",
+        "Gender": "female",
+        "Birthdate": "1992-12-20",
+        "NickName": "Em",
+        "Created": "2019-02-10",
+        "LastActive": "2021-12-05",
+        "Description": "Labore sint amet eiusmod ut labore.",
+        "City": "Riverside",
+        "Country": "Australia",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/women/18.jpg"
+        }
+    },
+    {
+        "UserName": "Christopher",
+        "Gender": "male",
+        "Birthdate": "1985-09-29",
+        "NickName": "Chris",
+        "Created": "2016-08-05",
+        "LastActive": "2023-05-21",
+        "Description": "Tempor incididunt enim aute aliqua ullamco pariatur excepteur laboris magna tempor ullamco ad ad incididunt.",
+        "City": "Oakland",
+        "Country": "United Kingdom",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/men/81.jpg"
+        }
+    },
+    {
+        "UserName": "Sophia",
+        "Gender": "female",
+        "Birthdate": "1983-03-14",
+        "NickName": "Soph",
+        "Created": "2017-06-30",
+        "LastActive": "2022-04-18",
+        "Description": "Incididunt fugiat aliqua enim velit enim cillum nostrud exercitation dolore laboris.",
+        "City": "Madrid",
+        "Country": "Spain",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/women/75.jpg"
+        }
+    },
+    {
+        "UserName": "Ryan",
+        "Gender": "male",
+        "Birthdate": "1996-11-08",
+        "NickName": "Ry",
+        "Created": "2019-10-25",
+        "LastActive": "2022-02-11",
+        "Description": "Laborum velit aute minim irure in consequat eiusmod consectetur commodo.",
+        "City": "Paris",
+        "Country": "France",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/men/12.jpg"
+        }
+    },
+    {
+        "UserName": "Isabella",
+        "Gender": "female",
+        "Birthdate": "1970-08-17",
+        "NickName": "Bella",
+        "Created": "2015-12-12",
+        "LastActive": "2023-03-30",
+        "Description": "Quis labore commodo anim pariatur adipisicing aute consequat nostrud occaecat incididunt.",
+        "City": "Berlin",
+        "Country": "Germany",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/women/48.jpg"
+        }
+    },
+    {
+        "UserName": "Nathan",
+        "Gender": "male",
+        "Birthdate": "1980-05-02",
+        "NickName": "Nate",
+        "Created": "2018-04-03",
+        "LastActive": "2023-01-28",
+        "Description": "Non ex nisi culpa exercitation velit elit id labore nostrud.",
+        "City": "Tokyo",
+        "Country": "Japan",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/men/65.jpg"
+        }
+    },
+    {
+        "UserName": "Olivia",
+        "Gender": "female",
+        "Birthdate": "1993-01-30",
+        "NickName": "Liv",
+        "Created": "2020-09-15",
+        "LastActive": "2022-06-19",
+        "Description": "Tempor aute consequat fugiat enim dolore.",
+        "City": "Sydney",
+        "Country": "Australia",
+        "ProfilePicture": 
+        {
+            "Url": "https://randomuser.me/api/portraits/women/5.jpg"
+        }
+    }
 ]

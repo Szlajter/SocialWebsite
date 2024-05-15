@@ -1,8 +1,11 @@
 <div class="card" *ngIf="post">
     <div class="card-header">
+      <div class="user-info">
         <img src="{{post.authorPhotoUrl}}" alt="Profile Picture" class="card-img rounded-circle">
         <span class="fw-bold me-1">{{post.authorNickname}}</span>
         @{{post.authorUsername}}
+      </div>
+      <button class="btn fa fa-trash text-danger" (click)="deletePost()"></button>
     </div>
     <div class="card-body">
       <p>{{post.content}}</p>

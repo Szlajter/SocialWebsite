@@ -28,6 +28,10 @@ export class PostsService {
     return this.http.post(this.baseUrl + 'posts', model);
   }
 
+  deletePost(id: number) {
+    return this.http.delete(this.baseUrl + 'posts/' + id);
+  }
+
   getPost(id: string) {
     return this.http.get<Post>(this.baseUrl + 'posts/' + id);
   }

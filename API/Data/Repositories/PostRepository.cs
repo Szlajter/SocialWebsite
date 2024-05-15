@@ -29,6 +29,11 @@ namespace API.Data
             _context.Posts.Remove(post);
         }
 
+        public void DeletePosts(List<Post> posts)
+        {
+            _context.Posts.RemoveRange(posts);
+        }
+
         public async Task<Post> GetPost(int id)
         {
             return await _context.Posts
@@ -45,6 +50,20 @@ namespace API.Data
             var post = await query.ProjectTo<PostWithCommentsDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
             
             return post;
+        }
+
+        public async Task<List<Post>> GetComments(int id)
+        {
+            var subComments = await _context.Posts.Where(u => u.ParentPostId == id).ToListAsync();
+            
+            var allComments = new List<Post>();
+            foreach(var subComment in subComments)
+            {
+                allComments.Add(subComment);
+                allComments.AddRange(await GetComments(subComment.Id));
+            }
+
+            return allComments;
         }
 
         public async Task<PaginatedList<PostDto>> GetPosts(string username, PaginationParams postParams)
@@ -67,7 +86,7 @@ namespace API.Data
                     .SetProperty(u => u.IsEdited, true));
         }
 
-        public void addLike(User user, Post post)
+        public void AddLike(User user, Post post)
         {
             if (post.LikedBy.Contains(user))
             {
@@ -84,7 +103,7 @@ namespace API.Data
             }
         }
 
-        public void addDislike(User user, Post post)
+        public void AddDislike(User user, Post post)
         {
             if (post.DislikedBy.Contains(user))
             {
